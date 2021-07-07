@@ -1,4 +1,22 @@
-package com.github.taucher2003.logback.discord.appender;
+/*
+ *
+ *  Copyright 2020 Niklas van Schrick and the Appenders Project
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+package com.github.taucher2003.appenders.utils;
 
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.StackTraceElementProxy;
@@ -7,10 +25,10 @@ import ch.qos.logback.classic.spi.ThrowableProxy;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-public final class Utils {
+public final class Utilities {
 
     // can't instantiate
-    private Utils() {
+    private Utilities() {
     }
 
     public static String getExceptionStacktrace(Throwable throwable) {
@@ -62,6 +80,7 @@ public final class Utils {
         return message.substring(0, max - 3) + "...";
     }
 
+    @SafeVarargs
     public static <T> T firstNotNull(T first, T... other) {
         if(first != null) {
             return first;
