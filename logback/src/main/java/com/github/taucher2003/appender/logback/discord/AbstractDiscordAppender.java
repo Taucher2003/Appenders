@@ -70,6 +70,7 @@ public abstract class AbstractDiscordAppender extends AppenderBase<ILoggingEvent
 
     private final Collection<WebhookEmbed> embedBuffer = new CopyOnWriteArrayList<>();
     private final Collection<String> markerNames = new CopyOnWriteArrayList<>();
+    private final Collection<Level> levels = new CopyOnWriteArrayList<>();
 
     private ScheduledFuture<?> sendFuture;
 
@@ -104,6 +105,10 @@ public abstract class AbstractDiscordAppender extends AppenderBase<ILoggingEvent
                     || !markerNames.contains(iLoggingEvent.getMarker().getName())) {
                 return;
             }
+        }
+        if (!levels.isEmpty()
+                && !levels.contains(iLoggingEvent.getLevel())) {
+            return;
         }
 
         WebhookEmbed embed = createEmbed(iLoggingEvent);
@@ -222,5 +227,10 @@ public abstract class AbstractDiscordAppender extends AppenderBase<ILoggingEvent
     // actually adds a marker
     public void setMarker(String marker) {
         markerNames.add(marker);
+    }
+
+    // actually adds a level
+    public void setLevel(String level) {
+        levels.add(Level.toLevel(level, Level.OFF));
     }
 }
