@@ -70,6 +70,8 @@ public abstract class AbstractDiscordAppender extends AppenderBase<ILoggingEvent
 
     private final Collection<WebhookEmbed> embedBuffer = new CopyOnWriteArrayList<>();
     private final Collection<String> markerNames = new CopyOnWriteArrayList<>();
+    private final Collection<String> ignoredMarkerNames = new CopyOnWriteArrayList<>();
+    private final Collection<Level> levels = new CopyOnWriteArrayList<>();
 
     private ScheduledFuture<?> sendFuture;
 
@@ -99,11 +101,19 @@ public abstract class AbstractDiscordAppender extends AppenderBase<ILoggingEvent
         if (iLoggingEvent.getMarker() != null && iLoggingEvent.getMarker().contains(SELF_IGNORE_MARKER)) {
             return;
         }
-        if (!markerNames.isEmpty()) {
-            if (iLoggingEvent.getMarker() == null
-                    || !markerNames.contains(iLoggingEvent.getMarker().getName())) {
+        if (iLoggingEvent.getMarker() != null) {
+            if (!markerNames.isEmpty()
+                    && !markerNames.contains(iLoggingEvent.getMarker().getName())) {
                 return;
             }
+
+            if (ignoredMarkerNames.contains(iLoggingEvent.getMarker().getName())) {
+                return;
+            }
+        }
+        if (!levels.isEmpty()
+                && !levels.contains(iLoggingEvent.getLevel())) {
+            return;
         }
 
         WebhookEmbed embed = createEmbed(iLoggingEvent);
@@ -222,5 +232,15 @@ public abstract class AbstractDiscordAppender extends AppenderBase<ILoggingEvent
     // actually adds a marker
     public void setMarker(String marker) {
         markerNames.add(marker);
+    }
+
+    // actually adds an ignored marker
+    public void setIgnoredMarker(String marker) {
+        ignoredMarkerNames.add(marker);
+    }
+
+    // actually adds a level
+    public void setLevel(String level) {
+        levels.add(Level.toLevel(level, Level.OFF));
     }
 }
