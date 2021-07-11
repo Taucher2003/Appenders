@@ -133,11 +133,11 @@ public abstract class AbstractDiscordAppender extends AppenderBase<ILoggingEvent
         if (throwable != null) {
             int remainingCharacters = maxTextSize() - description.length();
 
-            remainingCharacters -= "\n\n``````".length();
+            remainingCharacters -= "\n\n```\n```".length();
 
             if (remainingCharacters > 0) {
                 String stacktraceFormatted = Utilities.getExceptionStacktrace(throwable, remainingCharacters);
-                description += String.format("\n\n```%s```", stacktraceFormatted);
+                description += String.format("\n\n```\n%s```", stacktraceFormatted);
             }
         }
 
