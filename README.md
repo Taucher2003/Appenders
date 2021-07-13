@@ -66,11 +66,11 @@ dependencies {
 ## ⚙ Configuration
 
 <details>
-<summary>Logback</summary>
+<summary>Logback Discord</summary>
 
 You need to create a new appender in your `logback.xml` configuration. \
-As class, you can choose between `com.github.taucher2003.appender.logback.discord.BotAppender`
-and `com.github.taucher2003.appender.logback.discord.WebhookAppender`.
+As class, you can choose between `com.github.taucher2003.appender.logback.discord.LogbackBotAppender`
+and `com.github.taucher2003.appender.logback.discord.LogbackWebhookAppender`.
 
 The BotAppender requires the two settings `token` and `channelId`. \
 The WebhookAppender however, just requires the `url` setting.
@@ -85,8 +85,8 @@ Both of them allow shared settings. These are not required and have reasonable d
 | debugColor | Set the embed color of the debug level |
 | traceColor | Set the embed color of the trace level |
 | fallbackColor | Set the embed color for unknown levels |
-| sendingInterval | Set the interval which is used to regularly flush the buffer |
-| sendingUnit | Set the TimeUnit name for the `sendingInterval`. This is required to be a valid enum constant of `java.util.concurrent.TimeUnit` | 
+| flushInterval | Set the interval which is used to regularly flush the buffer |
+| flushUnit | Set the TimeUnit name for the `sendingInterval`. This is required to be a valid enum constant of `java.util.concurrent.TimeUnit` | 
 | marker | Add a marker to the list of allowed markers for this logger |
 | ignoredMarker | Add a marker, which is ignored |
 | level | Add a level which should be logged |
@@ -104,7 +104,7 @@ Same applies to `level` and `ignoredMarker`. \
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
     [...] existing configuration
-    <appender name="discord-bot" class="com.github.taucher2003.appender.logback.discord.BotAppender">
+    <appender name="discord-bot" class="com.github.taucher2003.appender.logback.discord.LogbackBotAppender">
         <token>[your bot token]</token>
         <channelId>[your channel id]</channelId>
         <level>ERROR</level> <!-- Restrict the logger to ERROR level -->
