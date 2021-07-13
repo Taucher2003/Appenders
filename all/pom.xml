@@ -32,8 +32,8 @@
     <version>${appenders.version}</version>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>${appenders.target}</maven.compiler.source>
+        <maven.compiler.target>${appenders.target}</maven.compiler.target>
     </properties>
 
     <dependencies>
