@@ -18,10 +18,6 @@
 
 package com.github.taucher2003.appenders.utils;
 
-import ch.qos.logback.classic.spi.IThrowableProxy;
-import ch.qos.logback.classic.spi.StackTraceElementProxy;
-import ch.qos.logback.classic.spi.ThrowableProxy;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -38,13 +34,13 @@ public final class Utilities {
         return sw.getBuffer().toString();
     }
 
-    public static String getExceptionStacktrace(IThrowableProxy throwable, int maxCharacters) {
-        if(throwable == null) {
+    public static String getExceptionStacktrace(Throwable throwable, int maxCharacters) {
+        if (throwable == null) {
             return null;
         }
 
-        StringBuilder builder = new StringBuilder(((ThrowableProxy)throwable).getThrowable().toString()+"\n");
-        StackTraceElementProxy[] stackTraceElements = throwable.getStackTraceElementProxyArray();
+        StringBuilder builder = new StringBuilder(throwable + "\n");
+        StackTraceElement[] stackTraceElements = throwable.getStackTrace();
         for (int i = 0; i < stackTraceElements.length; i++) {
             final String xMoreConstant = "\t... " + (stackTraceElements.length - i) + " more";
             String toAppend = "\t" + stackTraceElements[i].toString() + "\n";
