@@ -16,17 +16,17 @@
  *
  */
 
-package com.github.taucher2003.appender.logback.discord;
+package com.github.taucher2003.appender.logback;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 import com.github.taucher2003.appenders.core.AbstractAppender;
 
-public abstract class LogbackAppender<T extends AbstractAppender> extends AppenderBase<ILoggingEvent> {
+public abstract class AbstractLogbackAppender<T extends AbstractAppender> extends AppenderBase<ILoggingEvent> {
 
     protected final T delegate;
 
-    protected LogbackAppender(T delegate) {
+    protected AbstractLogbackAppender(T delegate) {
         this.delegate = delegate;
     }
 

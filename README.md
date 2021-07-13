@@ -16,11 +16,37 @@ planned.
 This project is published with the Maven Central repository.
 
 <details>
+<summary>Log4J</summary>
+
+### Maven
+
+```xml
+
+<dependency>
+    <groupId>com.github.taucher2003.appenders</groupId>
+    <artifactId>log4j</artifactId>
+    <version>VERSION</version>
+    <scope>compile</scope>
+</dependency>
+```
+
+### Gradle
+
+```groovy
+dependencies {
+    implementation 'com.github.taucher2003.appenders:log4j:VERSION'
+}
+```
+
+</details>
+
+<details>
 <summary>Logback</summary>
 
 ### Maven
 
 ```xml
+
 <dependency>
     <groupId>com.github.taucher2003.appenders</groupId>
     <artifactId>logback</artifactId>
@@ -64,6 +90,50 @@ dependencies {
 </details>
 
 ## ⚙ Configuration
+
+<details>
+<summary>Log4J Discord</summary>
+
+You need to create a new appender in your `log4j2.xml` configuration. \
+As plugin, you can choose between `DiscordBot` and `DiscordWebhook`.
+
+The DiscordBot plugin requires the two settings `token` and `channelId`. \
+The DiscordWebhook plugin however, just requires the `url` setting.
+
+#### Example Webhook and Bot Configuration
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="[...]" shutdownHook="[...]" packages="[...]">
+    <Appenders>
+        [...] existing appenders
+
+        <DiscordWebhook name="DiscordWebhook"
+                        url="[your webhook url]">
+            <filters>
+                <MarkerFilter marker="discord-webhook" onMatch="ACCEPT" onMismatch="DENY"/>
+            </filters>
+        </DiscordWebhook>
+
+        <DiscordBot name="DiscordBot"
+                    token="[your bot token]"
+                    channelId="[your channel id]">
+            <MarkerFilter marker="discord-bot" onMatch="ACCEPT" onMismatch="DENY"/>
+        </DiscordBot>
+
+    </Appenders>
+    <Loggers>
+        <Root level="[...]">
+            [...] existing loggers
+
+            <AppenderRef ref="DiscordWebhook"/>
+            <AppenderRef ref="DiscordBot"/>
+        </Root>
+    </Loggers>
+</Configuration>
+```
+
+</details>
 
 <details>
 <summary>Logback Discord</summary>

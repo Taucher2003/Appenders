@@ -29,6 +29,7 @@
 
     <groupId>com.github.taucher2003.appenders</groupId>
     <artifactId>logback</artifactId>
+    <version>${appenders.version}</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -44,7 +45,7 @@
         <dependency>
             <groupId>com.github.taucher2003.appenders</groupId>
             <artifactId>core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${appenders.version}</version>
         </dependency>
     </dependencies>
 </project>

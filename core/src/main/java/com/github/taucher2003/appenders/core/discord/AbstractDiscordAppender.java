@@ -16,10 +16,13 @@
  *
  */
 
-package com.github.taucher2003.appenders.core;
+package com.github.taucher2003.appenders.core.discord;
 
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
+import com.github.taucher2003.appenders.core.AbstractAppender;
+import com.github.taucher2003.appenders.core.LogEntry;
+import com.github.taucher2003.appenders.core.LogLevel;
 import com.github.taucher2003.appenders.utils.Utilities;
 
 import java.awt.Color;

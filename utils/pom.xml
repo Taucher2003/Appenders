@@ -29,6 +29,7 @@
 
     <groupId>com.github.taucher2003.appenders</groupId>
     <artifactId>utils</artifactId>
+    <version>${appenders.version}</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
