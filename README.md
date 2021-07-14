@@ -1,7 +1,7 @@
 # Appenders
 
-This project provides multiple appenders for logging frameworks. Currently, only logback is supported but more are
-planned.
+This project provides multiple appenders for logging frameworks. Currently, only Logback and Log4J are supported but
+more are planned.
 
 ## 🚩 Table of Contents
 
