@@ -21,7 +21,6 @@ This project is published with the Maven Central repository.
 ### Maven
 
 ```xml
-
 <dependency>
     <groupId>com.github.taucher2003.appenders</groupId>
     <artifactId>log4j</artifactId>
@@ -46,7 +45,6 @@ dependencies {
 ### Maven
 
 ```xml
-
 <dependency>
     <groupId>com.github.taucher2003.appenders</groupId>
     <artifactId>logback</artifactId>
