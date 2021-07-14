@@ -20,7 +20,7 @@ package com.github.taucher2003.appender.logback.discord;
 
 import com.github.taucher2003.appenders.core.discord.WebhookAppender;
 
-public class LogbackWebhookAppender extends LogbackDiscordAppender<WebhookAppender> {
+public class LogbackWebhookAppender extends AbstractLogbackDiscordAppender<WebhookAppender> {
 
     public LogbackWebhookAppender() {
         super(new WebhookAppender());

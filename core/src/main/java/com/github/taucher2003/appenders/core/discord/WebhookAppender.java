@@ -22,7 +22,6 @@ import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.AllowedMentions;
 import club.minnced.discord.webhook.send.WebhookEmbed;
-import com.github.taucher2003.appenders.core.AbstractDiscordAppender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

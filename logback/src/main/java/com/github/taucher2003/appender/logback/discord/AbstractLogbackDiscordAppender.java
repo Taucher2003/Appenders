@@ -20,12 +20,13 @@ package com.github.taucher2003.appender.logback.discord;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import com.github.taucher2003.appenders.core.AbstractDiscordAppender;
+import com.github.taucher2003.appender.logback.AbstractLogbackAppender;
 import com.github.taucher2003.appenders.core.LogEntry;
 import com.github.taucher2003.appenders.core.LogLevel;
+import com.github.taucher2003.appenders.core.discord.AbstractDiscordAppender;
 
-public abstract class LogbackDiscordAppender<T extends AbstractDiscordAppender> extends LogbackAppender<T> {
-    protected LogbackDiscordAppender(T delegate) {
+public abstract class AbstractLogbackDiscordAppender<T extends AbstractDiscordAppender> extends AbstractLogbackAppender<T> {
+    protected AbstractLogbackDiscordAppender(T delegate) {
         super(delegate);
     }
 

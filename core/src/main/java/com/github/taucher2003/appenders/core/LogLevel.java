@@ -21,6 +21,7 @@ package com.github.taucher2003.appenders.core;
 public class LogLevel {
 
     public static final LogLevel
+            FATAL = new LogLevel(50000, "FATAL"),
             ERROR = new LogLevel(40000, "ERROR"),
             WARN = new LogLevel(30000, "WARN"),
             INFO = new LogLevel(20000, "INFO"),
@@ -58,6 +59,9 @@ public class LogLevel {
             return fallback;
         }
 
+        if ("FATAL".equalsIgnoreCase(name)) {
+            return FATAL;
+        }
         if ("ERROR".equalsIgnoreCase(name)) {
             return ERROR;
         }

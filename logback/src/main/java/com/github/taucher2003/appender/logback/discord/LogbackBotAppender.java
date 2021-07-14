@@ -20,7 +20,7 @@ package com.github.taucher2003.appender.logback.discord;
 
 import com.github.taucher2003.appenders.core.discord.BotAppender;
 
-public class LogbackBotAppender extends LogbackDiscordAppender<BotAppender> {
+public class LogbackBotAppender extends AbstractLogbackDiscordAppender<BotAppender> {
 
     public LogbackBotAppender() {
         super(new BotAppender());

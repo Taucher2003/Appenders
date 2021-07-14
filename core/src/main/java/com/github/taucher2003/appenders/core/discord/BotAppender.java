@@ -20,7 +20,6 @@ package com.github.taucher2003.appenders.core.discord;
 
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookMessage;
-import com.github.taucher2003.appenders.core.AbstractDiscordAppender;
 import com.github.taucher2003.appenders.utils.DiscordRequester;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;

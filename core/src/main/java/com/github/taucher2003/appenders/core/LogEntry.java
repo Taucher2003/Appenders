@@ -18,6 +18,7 @@
 
 package com.github.taucher2003.appenders.core;
 
+import com.github.taucher2003.appenders.utils.Utilities;
 import org.slf4j.Marker;
 import org.slf4j.helpers.MessageFormatter;
 
@@ -25,7 +26,7 @@ public final class LogEntry {
 
     private final String threadName;
     private final LogLevel level;
-    private final String message;
+    private final String messageFormat;
     private final String formattedMessage;
     private final Object[] argumentArray;
     private final String loggerName;
@@ -33,17 +34,17 @@ public final class LogEntry {
     private final Marker marker;
     private final long timestamp;
 
-    private LogEntry(String threadName, LogLevel level, String message, Object[] argumentArray, String loggerName,
-                     Throwable throwable, Marker marker, long timestamp) {
+    private LogEntry(String threadName, LogLevel level, String messageFormat, Object[] argumentArray, String formattedMessage,
+                     String loggerName, Throwable throwable, Marker marker, long timestamp) {
         this.threadName = threadName;
         this.level = level;
-        this.message = message;
+        this.messageFormat = messageFormat;
         this.argumentArray = argumentArray;
         this.loggerName = loggerName;
         this.throwable = throwable;
         this.marker = marker;
         this.timestamp = timestamp;
-        this.formattedMessage = MessageFormatter.arrayFormat(message, argumentArray).getMessage();
+        this.formattedMessage = Utilities.firstNotNull(formattedMessage, MessageFormatter.arrayFormat(messageFormat, argumentArray).getMessage());
     }
 
     public String getThreadName() {
@@ -54,8 +55,8 @@ public final class LogEntry {
         return level;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMessageFormat() {
+        return messageFormat;
     }
 
     public String getFormattedMessage() {
@@ -92,6 +93,7 @@ public final class LogEntry {
         private LogLevel level;
         private String message;
         private Object[] argumentArray;
+        private String formattedMessage;
         private String loggerName;
         private Throwable throwable;
         private Marker marker;
@@ -117,6 +119,11 @@ public final class LogEntry {
             return this;
         }
 
+        public Builder formattedMessage(String formattedMessage) {
+            this.formattedMessage = formattedMessage;
+            return this;
+        }
+
         public Builder loggerName(String loggerName) {
             this.loggerName = loggerName;
             return this;
@@ -138,7 +145,7 @@ public final class LogEntry {
         }
 
         public LogEntry build() {
-            return new LogEntry(threadName, level, message, argumentArray, loggerName, throwable, marker, timestamp);
+            return new LogEntry(threadName, level, message, argumentArray, formattedMessage, loggerName, throwable, marker, timestamp);
         }
     }
 }
