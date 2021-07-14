@@ -28,7 +28,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.taucher2003.appenders</groupId>
-    <artifactId>all</artifactId>
+    <artifactId>core</artifactId>
     <version>${appenders.version}</version>
 
     <properties>
@@ -39,12 +39,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.taucher2003.appenders</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${appenders.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.taucher2003.appenders</groupId>
-            <artifactId>logback</artifactId>
+            <artifactId>utils</artifactId>
             <version>${appenders.version}</version>
         </dependency>
     </dependencies>

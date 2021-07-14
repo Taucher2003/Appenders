@@ -16,7 +16,7 @@
  *
  */
 
-package com.github.taucher2003.appender.logback.discord;
+package com.github.taucher2003.appenders.core.discord;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
