@@ -34,6 +34,13 @@ public final class Log4JWebhookAppender extends AbstractLog4JDiscordAppender<Web
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Log4JBotAppender.class);
 
+    // legacy support for log4j version before 2.11.2
+    @Deprecated
+    private Log4JWebhookAppender(String name, String url, Filter filter, boolean ignoreExceptions, Object ignored) {
+        super(new WebhookAppender(), name, filter, null, ignoreExceptions);
+        delegate.setUrl(url);
+    }
+
     private Log4JWebhookAppender(String name, String url, Filter filter, boolean ignoreExceptions) {
         super(new WebhookAppender(), name, filter, null, ignoreExceptions, null);
         delegate.setUrl(url);
@@ -51,6 +58,10 @@ public final class Log4JWebhookAppender extends AbstractLog4JDiscordAppender<Web
             return null;
         }
 
-        return new Log4JWebhookAppender(name, url, filter, ignoreExceptions);
+        try {
+            return new Log4JWebhookAppender(name, url, filter, ignoreExceptions);
+        } catch (NoSuchMethodError ignored) {
+            return new Log4JWebhookAppender(name, url, filter, ignoreExceptions, null);
+        }
     }
 }

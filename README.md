@@ -137,8 +137,8 @@ The DiscordWebhook plugin however, just requires the `url` setting.
 <summary>Logback Discord</summary>
 
 You need to create a new appender in your `logback.xml` configuration. \
-As class, you can choose between `com.github.taucher2003.appender.logback.discord.LogbackBotAppender`
-and `com.github.taucher2003.appender.logback.discord.LogbackWebhookAppender`.
+As class, you can choose between `com.github.taucher2003.appenders.logback.discord.LogbackBotAppender`
+and `com.github.taucher2003.appenders.logback.discord.LogbackWebhookAppender`.
 
 The BotAppender requires the two settings `token` and `channelId`. \
 The WebhookAppender however, just requires the `url` setting.
@@ -172,7 +172,7 @@ Same applies to `level` and `ignoredMarker`. \
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
     [...] existing configuration
-    <appender name="discord-bot" class="com.github.taucher2003.appender.logback.discord.LogbackBotAppender">
+    <appender name="discord-bot" class="com.github.taucher2003.appenders.logback.discord.LogbackBotAppender">
         <token>[your bot token]</token>
         <channelId>[your channel id]</channelId>
         <level>ERROR</level> <!-- Restrict the logger to ERROR level -->

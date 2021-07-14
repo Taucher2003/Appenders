@@ -75,13 +75,6 @@
         </repository>
     </distributionManagement>
 
-    <repositories>
-        <repository>
-            <id>dv8</id>
-            <url>https://m2.dv8tion.net/releases</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -94,9 +87,9 @@
             <version>0.5.7</version>
         </dependency>
         <dependency>
-            <groupId>com.squareup.okhttp</groupId>
+            <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>1.6.0</version>
+            <version>3.14.9</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

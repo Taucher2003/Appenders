@@ -38,6 +38,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20201115</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.taucher2003.appenders</groupId>
             <artifactId>utils</artifactId>
             <version>${appenders.version}</version>

@@ -73,29 +73,32 @@ public abstract class AbstractAppender {
     }
 
     public final void append(LogEntry logEntry) {
-        if (logEntry.getMarker() != null && logEntry.getMarker().contains(SELF_IGNORE_MARKER)) {
-            return;
-        }
-        if (logEntry.getMarker() != null) {
-            if (!markerNames.isEmpty()
-                    && !markerNames.contains(logEntry.getMarker().getName())) {
+        // Run everything async, so the logging is not the bottleneck
+        EXECUTOR_SERVICE.execute(() -> {
+            if (logEntry.getMarker() != null && logEntry.getMarker().contains(SELF_IGNORE_MARKER)) {
+                return;
+            }
+            if (logEntry.getMarker() != null) {
+                if (!markerNames.isEmpty()
+                        && !markerNames.contains(logEntry.getMarker().getName())) {
+                    return;
+                }
+
+                if (ignoredMarkerNames.contains(logEntry.getMarker().getName())) {
+                    return;
+                }
+            }
+            if (logEntry.getMarker() == null
+                    && !markerNames.isEmpty()) {
+                return;
+            }
+            if (!levels.isEmpty()
+                    && !levels.contains(logEntry.getLevel())) {
                 return;
             }
 
-            if (ignoredMarkerNames.contains(logEntry.getMarker().getName())) {
-                return;
-            }
-        }
-        if (logEntry.getMarker() == null
-                && !markerNames.isEmpty()) {
-            return;
-        }
-        if (!levels.isEmpty()
-                && !levels.contains(logEntry.getLevel())) {
-            return;
-        }
-
-        doAppend(logEntry);
+            doAppend(logEntry);
+        });
     }
 
     protected abstract void doAppend(LogEntry logEntry);

@@ -16,31 +16,21 @@
  *
  */
 
-package com.github.taucher2003.appender.logback.discord;
+package com.github.taucher2003.appenders.utils.executors;
 
-import com.github.taucher2003.appenders.core.discord.WebhookAppender;
+import com.github.taucher2003.appenders.utils.Bucket;
+import com.github.taucher2003.appenders.utils.WebRequestExecutor;
+import com.github.taucher2003.appenders.utils.buckets.DiscordBucket;
+import okhttp3.OkHttpClient;
+import org.slf4j.Marker;
 
-public class LogbackWebhookAppender extends AbstractLogbackDiscordAppender<WebhookAppender> {
-
-    public LogbackWebhookAppender() {
-        super(new WebhookAppender());
+public class DiscordWebRequestExecutor extends WebRequestExecutor {
+    public DiscordWebRequestExecutor(Marker selfIgnoringMarker, OkHttpClient httpClient) {
+        super(selfIgnoringMarker, httpClient);
     }
 
     @Override
-    public void start() {
-        super.start();
-        delegate.start();
-    }
-
-    @Override
-    public void stop() {
-        delegate.stop();
-        super.stop();
-    }
-
-    // ---- Setters
-
-    public void setUrl(String url) {
-        delegate.setUrl(url);
+    protected Bucket createBucket(Marker selfIgnoringMarker) {
+        return new DiscordBucket(selfIgnoringMarker);
     }
 }
