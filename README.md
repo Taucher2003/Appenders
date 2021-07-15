@@ -6,10 +6,20 @@ more are planned.
 ## 🚩 Table of Contents
 
 <ol>
+    <li><a href="#-appender-list">Appender List</a></li>
     <li><a href="#-installation">Installation</a></li>
     <li><a href="#-configuration">Configuration</a></li>
     <li><a href="#-contributing">Contributing</a></li>
 </ol>
+
+## 📂 Appender List
+
+| Appender name | Description |
+|---------------|-------------|
+| DiscordWebhook | Sends log entries via Webhook to a Discord channel |
+| DiscordBot | Sends log entries via Bot account to a Discord channel |
+| GithubIssue | Creates an issue for exceptions on a Github Repository |
+| GithubCommentingIssue | Creates an issue for exceptions on a Github Repository, but tries to prevent duplicated issues |
 
 ## ⚡ Installation
 
@@ -134,6 +144,56 @@ The DiscordWebhook plugin however, just requires the `url` setting.
 </details>
 
 <details>
+<summary>Log4J Github</summary>
+
+You need to create a new appender in your `log4j2.xml` configuration. \
+As plugin, you can choose between `GithubIssue` and `GithubCommentingIssue`.
+
+Both of them require the settings `baseUrl`, `repositoryOwner`, `repositoryName` and `accessToken`. \
+`baseUrl` is the base url of the Github API. For github.com users, this would be `https://api.github.com`.
+`repositoryOwner` defines the name of the account, which owns the repository. That is either your username or
+organization name.
+`repositoryName` sets the name of the repository itself, which will be used to create the issues. The `accessToken` will
+be used for authorization. The issues will be created with the account, where the access token belongs to.
+
+This appender will only log events which have a throwable attached. All log events without a throwable will be dropped
+by this appender. The log level does not matter.
+
+#### Example Configuration with both appenders
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="[...]" shutdownHook="[...]" packages="[...]">
+    <Appenders>
+        [...] existing appenders
+
+        <GithubIssue name="GithubIssue"
+                        baseUrl="https://api.github.com"
+                        repositoryOwner="Taucher2003"
+                        repositoryName="Appenders"
+                        accessToken="[your access token]"/>
+
+        <GithubCommentingIssue name="GithubCommentingIssue"
+                     baseUrl="https://api.github.com"
+                     repositoryOwner="Taucher2003"
+                     repositoryName="Appenders"
+                     accessToken="[your access token]"/>
+
+    </Appenders>
+    <Loggers>
+        <Root level="[...]">
+            [...] existing loggers
+
+            <AppenderRef ref="GithubIssue"/>
+            <AppenderRef ref="GithubCommentingIssue"/>
+        </Root>
+    </Loggers>
+</Configuration>
+```
+
+</details>
+
+<details>
 <summary>Logback Discord</summary>
 
 You need to create a new appender in your `logback.xml` configuration. \
@@ -181,6 +241,50 @@ Same applies to `level` and `ignoredMarker`. \
     <root level="INFO">
         [...] other existing appenders
         <appender-ref ref="discord-bot"/>
+    </root>
+</configuration>
+```
+
+</details>
+
+<details>
+<summary>Logback Github</summary>
+
+You need to create a new appender in your `logback.xml` configuration. \
+As class, you can choose between `com.github.taucher2003.appenders.logback.github.LogbackIssueAppender`
+and `com.github.taucher2003.appenders.logback.github.LogbackCommentingIssueAppender`.
+
+Both of them require the settings `baseUrl`, `repositoryOwner`, `repositoryName` and `accessToken`. \
+`baseUrl` is the base url of the Github API. For github.com users, this would be `https://api.github.com`.
+`repositoryOwner` defines the name of the account, which owns the repository. That is either your username or
+organization name.
+`repositoryName` sets the name of the repository itself, which will be used to create the issues. The `accessToken` will
+be used for authorization. The issues will be created with the account, where the access token belongs to.
+
+This appender will only log events which have a throwable attached. All log events without a throwable will be dropped
+by this appender.
+
+If no values have been set for `marker`, all log events will be handled by the logger. If at least one `marker` has been
+set, only log events with a marker named like one in the list will be handled and log events without or with other
+markers will be dropped by this logger. \
+Same applies to `level` and `ignoredMarker`. \
+`level` is used to filter for logging levels and `ignoredMarker` will set markers, which will be dropped.
+
+#### Example Issue Configuration
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    [...] existing configuration
+    <appender name="github-issues" class="com.github.taucher2003.appenders.logback.github.LogbackIssueAppender">
+        <baseUrl>https://api.github.com</baseUrl>
+        <repositoryOwner>Taucher2003</repositoryOwner>
+        <repositoryName>Appenders</repositoryName>
+        <accessToken>[your access token]</accessToken>
+    </appender>
+    <root level="INFO">
+        [...] other existing appenders
+        <appender-ref ref="github-issues"/>
     </root>
 </configuration>
 ```
