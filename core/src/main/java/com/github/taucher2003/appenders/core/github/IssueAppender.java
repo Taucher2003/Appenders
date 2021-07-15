@@ -69,9 +69,9 @@ public class IssueAppender extends AbstractGithubAppender {
     }
 
     protected String createBody(LogEntry logEntry) {
-        return "["
+        return "An exception has been logged with "
                 + logEntry.getLevel().getLevelName()
-                + "] "
+                + " level.\n\n"
                 + logEntry.getFormattedMessage()
                 + "\n\n```\n"
                 + Utilities.getExceptionStacktrace(logEntry.getThrowable())
