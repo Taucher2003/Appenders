@@ -44,9 +44,9 @@ public final class Log4JIssueAppender extends AbstractLog4JGithubAppender<IssueA
     public static Log4JIssueAppender createAppender(
             @PluginAttribute("name") String name,
             @PluginAttribute("ignoreExceptions") boolean ignoreExceptions,
-            @PluginAttribute(value = "baseUrl", sensitive = true) String baseUrl,
-            @PluginAttribute(value = "repositoryOwner", sensitive = true) String repositoryOwner,
-            @PluginAttribute(value = "repositoryName", sensitive = true) String repositoryName,
+            @PluginAttribute(value = "baseUrl", defaultString = "https://api.github.com") String baseUrl,
+            @PluginAttribute(value = "repositoryOwner") String repositoryOwner,
+            @PluginAttribute(value = "repositoryName") String repositoryName,
             @PluginAttribute(value = "accessToken", sensitive = true) String accessToken,
             @PluginElement("Filters") Filter filter
     ) {
