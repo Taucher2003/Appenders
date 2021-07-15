@@ -76,11 +76,11 @@ public abstract class WebRequestExecutor {
 
     private synchronized void executeQueue() {
         while (!requests.isEmpty()) {
-            DataPair<Request, CompletableFuture<String>> request = requests.poll();
             if (bucket.isRatelimit()) {
                 delayQueue();
                 break;
             }
+            DataPair<Request, CompletableFuture<String>> request = requests.poll();
             boolean successful = executePair(request);
             if (!successful) {
                 break;
