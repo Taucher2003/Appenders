@@ -1,0 +1,7 @@
+<component name="CopyrightManager">
+  <settings default="appenders">
+    <module2copyright>
+      <element module="All" copyright="appenders" />
+    </module2copyright>
+  </settings>
+</component>
