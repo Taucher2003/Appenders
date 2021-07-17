@@ -16,11 +16,15 @@
  *
  */
 
-package com.github.taucher2003.appender.logback;
+package com.github.taucher2003.appenders.logback;
 
+import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.ThrowableProxy;
 import ch.qos.logback.core.AppenderBase;
 import com.github.taucher2003.appenders.core.AbstractAppender;
+import com.github.taucher2003.appenders.core.LogEntry;
+import com.github.taucher2003.appenders.core.LogLevel;
 
 public abstract class AbstractLogbackAppender<T extends AbstractAppender> extends AppenderBase<ILoggingEvent> {
 
@@ -31,7 +35,25 @@ public abstract class AbstractLogbackAppender<T extends AbstractAppender> extend
     }
 
     @Override
-    protected abstract void append(ILoggingEvent eventObject);
+    protected void append(ILoggingEvent eventObject) {
+        LogEntry.Builder builder = LogEntry.builder()
+                .threadName(eventObject.getThreadName())
+                .level(fromLogback(eventObject.getLevel()))
+                .message(eventObject.getMessage())
+                .argumentArray(eventObject.getArgumentArray())
+                .loggerName(eventObject.getLoggerName());
+        if (eventObject.getThrowableProxy() != null) {
+            builder.throwable(((ThrowableProxy) eventObject.getThrowableProxy()).getThrowable());
+        }
+        builder.marker(eventObject.getMarker())
+                .timestamp(eventObject.getTimeStamp())
+                .build();
+        delegate.append(builder.build());
+    }
+
+    private LogLevel fromLogback(Level level) {
+        return LogLevel.fromString(level.levelStr, LogLevel.DEBUG);
+    }
 
     public void setFlushInterval(String flushInterval) {
         delegate.setFlushInterval(flushInterval);

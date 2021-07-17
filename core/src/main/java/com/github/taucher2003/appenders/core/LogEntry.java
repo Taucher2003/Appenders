@@ -22,6 +22,8 @@ import com.github.taucher2003.appenders.utils.Utilities;
 import org.slf4j.Marker;
 import org.slf4j.helpers.MessageFormatter;
 
+import java.util.Arrays;
+
 public final class LogEntry {
 
     private final String threadName;
@@ -81,6 +83,21 @@ public final class LogEntry {
 
     public long getTimestamp() {
         return timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "LogEntry{" +
+                "threadName='" + threadName + '\'' +
+                ", level=" + level +
+                ", messageFormat='" + messageFormat + '\'' +
+                ", formattedMessage='" + formattedMessage + '\'' +
+                ", argumentArray=" + Arrays.toString(argumentArray) +
+                ", loggerName='" + loggerName + '\'' +
+                ", throwable=" + throwable +
+                ", marker=" + marker +
+                ", timestamp=" + timestamp +
+                '}';
     }
 
     public static Builder builder() {
@@ -146,6 +163,21 @@ public final class LogEntry {
 
         public LogEntry build() {
             return new LogEntry(threadName, level, message, argumentArray, formattedMessage, loggerName, throwable, marker, timestamp);
+        }
+
+        @Override
+        public String toString() {
+            return "LogEntry.Builder{" +
+                    "threadName='" + threadName + '\'' +
+                    ", level=" + level +
+                    ", message='" + message + '\'' +
+                    ", argumentArray=" + Arrays.toString(argumentArray) +
+                    ", formattedMessage='" + formattedMessage + '\'' +
+                    ", loggerName='" + loggerName + '\'' +
+                    ", throwable=" + throwable +
+                    ", marker=" + marker +
+                    ", timestamp=" + timestamp +
+                    '}';
         }
     }
 }

@@ -34,6 +34,14 @@ public final class Log4JBotAppender extends AbstractLog4JDiscordAppender<BotAppe
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Log4JBotAppender.class);
 
+    // legacy support for log4j version before 2.11.2
+    @Deprecated
+    private Log4JBotAppender(String name, String token, String channelId, Filter filter, boolean ignoreExceptions, Object ignored) {
+        super(new BotAppender(), name, filter, null, ignoreExceptions);
+        delegate.setToken(token);
+        delegate.setChannelId(channelId);
+    }
+
     private Log4JBotAppender(String name, String token, String channelId, Filter filter, boolean ignoreExceptions) {
         super(new BotAppender(), name, filter, null, ignoreExceptions, null);
         delegate.setToken(token);
@@ -45,7 +53,7 @@ public final class Log4JBotAppender extends AbstractLog4JDiscordAppender<BotAppe
             @PluginAttribute("name") String name,
             @PluginAttribute("ignoreExceptions") boolean ignoreExceptions,
             @PluginAttribute(value = "token", sensitive = true) String token,
-            @PluginAttribute(value = "channelId", sensitive = true) String channelId,
+            @PluginAttribute(value = "channelId") String channelId,
             @PluginElement("Filters") Filter filter
     ) {
         if (name == null) {
@@ -53,6 +61,10 @@ public final class Log4JBotAppender extends AbstractLog4JDiscordAppender<BotAppe
             return null;
         }
 
-        return new Log4JBotAppender(name, token, channelId, filter, ignoreExceptions);
+        try {
+            return new Log4JBotAppender(name, token, channelId, filter, ignoreExceptions);
+        } catch (NoSuchMethodError ignored) {
+            return new Log4JBotAppender(name, token, channelId, filter, ignoreExceptions, null);
+        }
     }
 }

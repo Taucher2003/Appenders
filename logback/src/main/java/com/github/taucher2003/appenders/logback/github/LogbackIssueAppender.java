@@ -16,35 +16,17 @@
  *
  */
 
-package com.github.taucher2003.appender.logback.discord;
+package com.github.taucher2003.appenders.logback.github;
 
-import com.github.taucher2003.appenders.core.discord.BotAppender;
+import com.github.taucher2003.appenders.core.github.IssueAppender;
 
-public class LogbackBotAppender extends AbstractLogbackDiscordAppender<BotAppender> {
+public class LogbackIssueAppender extends AbstractLogbackGithubAppender<IssueAppender> {
 
-    public LogbackBotAppender() {
-        super(new BotAppender());
+    public LogbackIssueAppender() {
+        super(new IssueAppender());
     }
 
-    @Override
-    public void start() {
-        super.start();
-        delegate.start();
-    }
-
-    @Override
-    public void stop() {
-        delegate.stop();
-        super.stop();
-    }
-
-    // ---- Setters
-
-    public void setToken(String token) {
-        delegate.setToken(token);
-    }
-
-    public void setChannelId(String channelId) {
-        delegate.setChannelId(channelId);
+    public void setLabel(String label) {
+        delegate.setLabel(label);
     }
 }

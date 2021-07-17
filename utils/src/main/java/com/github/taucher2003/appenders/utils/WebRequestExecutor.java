@@ -21,6 +21,7 @@ package com.github.taucher2003.appenders.utils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -35,26 +36,28 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class DiscordRequestExecutor {
+public abstract class WebRequestExecutor {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DiscordRequestExecutor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebRequestExecutor.class);
 
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private final Marker selfIgnoringMarker;
-    private final DiscordRequester.Bucket bucket;
+    private final Bucket bucket;
     private final OkHttpClient httpClient;
 
-    private final BlockingQueue<DataPair<Request, CompletableFuture<Void>>> requests = new LinkedBlockingQueue<>();
+    private final BlockingQueue<DataPair<Request, CompletableFuture<String>>> requests = new LinkedBlockingQueue<>();
     private final AtomicReference<ScheduledFuture<?>> currentQueueExecution = new AtomicReference<>();
     private boolean shuttingDown;
 
-    public DiscordRequestExecutor(Marker selfIgnoringMarker, OkHttpClient httpClient) {
+    public WebRequestExecutor(Marker selfIgnoringMarker, OkHttpClient httpClient) {
         this.selfIgnoringMarker = selfIgnoringMarker;
-        this.bucket = new DiscordRequester.Bucket(selfIgnoringMarker);
+        this.bucket = createBucket(selfIgnoringMarker);
         this.httpClient = httpClient;
     }
 
-    boolean addToQueue(DataPair<Request, CompletableFuture<Void>> request) {
+    protected abstract Bucket createBucket(Marker selfIgnoringMarker);
+
+    boolean addToQueue(DataPair<Request, CompletableFuture<String>> request) {
         boolean added = requests.add(request);
         if (added && currentQueueExecution.get() == null) {
             delayQueue();
@@ -73,11 +76,11 @@ public class DiscordRequestExecutor {
 
     private synchronized void executeQueue() {
         while (!requests.isEmpty()) {
-            DataPair<Request, CompletableFuture<Void>> request = requests.poll();
             if (bucket.isRatelimit()) {
                 delayQueue();
                 break;
             }
+            DataPair<Request, CompletableFuture<String>> request = requests.poll();
             boolean successful = executePair(request);
             if (!successful) {
                 break;
@@ -89,7 +92,7 @@ public class DiscordRequestExecutor {
         }
     }
 
-    private boolean executePair(DataPair<Request, ? extends CompletableFuture<Void>> request) {
+    private boolean executePair(DataPair<Request, ? extends CompletableFuture<String>> request) {
         try (Response response = httpClient.newCall(request.getFirst()).execute()) {
             bucket.update(response);
             if (response.code() == 429) {
@@ -97,19 +100,24 @@ public class DiscordRequestExecutor {
                 return false;
             }
             if (!response.isSuccessful()) {
-                LOGGER.error(selfIgnoringMarker, "Sending a webhook message failed with non-OK http response ({})", response.code());
-                IOException exception = new IOException("Sending Bot message has failed with HTTP code " + response.code());
+                LOGGER.error(selfIgnoringMarker, "Sending a web request failed with non-OK http response ({})", response.code());
+                IOException exception = new IOException("Sending web request has failed with HTTP code " + response.code());
                 exception.fillInStackTrace();
                 request.getSecond().completeExceptionally(exception);
                 return true;
             }
-            request.getSecond().complete(null);
+            ResponseBody body = response.body();
+            if (body != null) {
+                request.getSecond().complete(body.string());
+            } else {
+                request.getSecond().complete(null);
+            }
             if (bucket.isRatelimit()) {
                 delayQueue();
                 return false;
             }
         } catch (IOException e) {
-            LOGGER.error(selfIgnoringMarker, "There was some error while sending a webhook message", e);
+            LOGGER.error(selfIgnoringMarker, "There was some error while sending a web request", e);
             request.getSecond().completeExceptionally(e);
         }
         return true;

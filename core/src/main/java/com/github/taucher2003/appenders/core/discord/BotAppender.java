@@ -20,7 +20,8 @@ package com.github.taucher2003.appenders.core.discord;
 
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookMessage;
-import com.github.taucher2003.appenders.utils.DiscordRequester;
+import com.github.taucher2003.appenders.utils.WebRequester;
+import com.github.taucher2003.appenders.utils.executors.DiscordWebRequestExecutor;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -37,14 +38,14 @@ public class BotAppender extends AbstractDiscordAppender {
 
     private static final int MAX_EMBED_PER_MESSAGE = 10;
     private final OkHttpClient httpClient = new OkHttpClient.Builder().build();
-    private final DiscordRequester discordRequester;
+    private final WebRequester discordRequester;
 
     private String token;
     private long channelId;
 
     public BotAppender() {
         super.sendStrategy = this::doSend;
-        this.discordRequester = new DiscordRequester(SELF_IGNORE_MARKER, httpClient);
+        this.discordRequester = new WebRequester(new DiscordWebRequestExecutor(SELF_IGNORE_MARKER, httpClient));
     }
 
     private void doSend(Collection<WebhookEmbed> embeds) {

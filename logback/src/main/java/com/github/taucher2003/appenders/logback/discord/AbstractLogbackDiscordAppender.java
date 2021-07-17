@@ -16,37 +16,14 @@
  *
  */
 
-package com.github.taucher2003.appender.logback.discord;
+package com.github.taucher2003.appenders.logback.discord;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import com.github.taucher2003.appender.logback.AbstractLogbackAppender;
-import com.github.taucher2003.appenders.core.LogEntry;
-import com.github.taucher2003.appenders.core.LogLevel;
 import com.github.taucher2003.appenders.core.discord.AbstractDiscordAppender;
+import com.github.taucher2003.appenders.logback.AbstractLogbackAppender;
 
 public abstract class AbstractLogbackDiscordAppender<T extends AbstractDiscordAppender> extends AbstractLogbackAppender<T> {
     protected AbstractLogbackDiscordAppender(T delegate) {
         super(delegate);
-    }
-
-    @Override
-    protected void append(ILoggingEvent eventObject) {
-        LogEntry entry = LogEntry.builder()
-                .threadName(eventObject.getThreadName())
-                .level(fromLogback(eventObject.getLevel()))
-                .message(eventObject.getMessage())
-                .argumentArray(eventObject.getArgumentArray())
-                .loggerName(eventObject.getLoggerName())
-                .throwable((Throwable) eventObject.getThrowableProxy())
-                .marker(eventObject.getMarker())
-                .timestamp(eventObject.getTimeStamp())
-                .build();
-        delegate.append(entry);
-    }
-
-    private LogLevel fromLogback(Level level) {
-        return LogLevel.fromString(level.levelStr, LogLevel.DEBUG);
     }
 
     public void setErrorColor(String color) {

@@ -16,25 +16,26 @@
  *
  */
 
-package com.github.taucher2003.appenders.log4j.discord;
+package com.github.taucher2003.appenders.log4j;
 
-import com.github.taucher2003.appenders.core.discord.AbstractDiscordAppender;
-import com.github.taucher2003.appenders.log4j.AbstractLog4JAppender;
+import com.github.taucher2003.appenders.core.AbstractWebAppender;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.config.Property;
 
 import java.io.Serializable;
 
-public abstract class AbstractLog4JDiscordAppender<T extends AbstractDiscordAppender> extends AbstractLog4JAppender<T> {
+public abstract class AbstractLog4JWebAppender<T extends AbstractWebAppender> extends AbstractLog4JAppender<T> {
 
     // legacy support for log4j version before 2.11.2
     @Deprecated
-    protected AbstractLog4JDiscordAppender(T delegate, String name, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions) {
+    protected AbstractLog4JWebAppender(T delegate, String name, String baseUrl, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions) {
         super(delegate, name, filter, layout, ignoreExceptions);
+        delegate.setBaseUrl(baseUrl);
     }
 
-    protected AbstractLog4JDiscordAppender(T delegate, String name, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions, Property[] properties) {
+    protected AbstractLog4JWebAppender(T delegate, String name, String baseUrl, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions, Property[] properties) {
         super(delegate, name, filter, layout, ignoreExceptions, properties);
+        delegate.setBaseUrl(baseUrl);
     }
 }
