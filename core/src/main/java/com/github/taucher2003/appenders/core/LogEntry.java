@@ -167,7 +167,7 @@ public final class LogEntry {
 
         @Override
         public String toString() {
-            return "Builder{" +
+            return "LogEntry.Builder{" +
                     "threadName='" + threadName + '\'' +
                     ", level=" + level +
                     ", message='" + message + '\'' +

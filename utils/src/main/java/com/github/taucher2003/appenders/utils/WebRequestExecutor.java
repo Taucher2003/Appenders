@@ -109,6 +109,8 @@ public abstract class WebRequestExecutor {
             ResponseBody body = response.body();
             if (body != null) {
                 request.getSecond().complete(body.string());
+            } else {
+                request.getSecond().complete(null);
             }
             if (bucket.isRatelimit()) {
                 delayQueue();
