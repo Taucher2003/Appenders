@@ -43,7 +43,7 @@ public final class Utilities {
         StackTraceElement[] stackTraceElements = throwable.getStackTrace();
         for (int i = 0; i < stackTraceElements.length; i++) {
             final String xMoreConstant = "\t... " + (stackTraceElements.length - i) + " more";
-            String toAppend = "\t" + stackTraceElements[i].toString() + "\n";
+            String toAppend = "\tat " + stackTraceElements[i].toString() + "\n";
             if ((builder.length() + toAppend.length() + xMoreConstant.length()) >= maxCharacters) {
                 builder.append(xMoreConstant);
                 break;
