@@ -9,6 +9,7 @@ more are planned.
     <li><a href="#-appender-list">Appender List</a></li>
     <li><a href="#-installation">Installation</a></li>
     <li><a href="#-configuration">Configuration</a></li>
+    <li><a href="#-known-bugs">Known Bugs</a></li>
     <li><a href="#-contributing">Contributing</a></li>
 </ol>
 
@@ -290,6 +291,10 @@ Same applies to `level` and `ignoredMarker`. \
 ```
 
 </details>
+
+## 🐛 Known Bugs
+
+* Appenders prevents shutdown, requires explicit `System.exit(code)` to trigger the shutdown hook (#22)
 
 ## 🔮 Contributing
 
