@@ -20,20 +20,42 @@ package com.github.taucher2003.appenders.utils;
 
 import java.util.Objects;
 
+/**
+ * Class to store two objects. Useful as return type to return multiple objects
+ *
+ * @param <F> type of the first object
+ * @param <S> type of the second object
+ */
 public class DataPair<F, S> {
 
     private final F first;
     private final S second;
 
+    /**
+     * Creates a new DataPair
+     *
+     * @param first  the first element
+     * @param second the second element
+     */
     public DataPair(F first, S second) {
         this.first = first;
         this.second = second;
     }
 
+    /**
+     * Returns the first element of this pair
+     *
+     * @return the element
+     */
     public F getFirst() {
         return first;
     }
 
+    /**
+     * Returns the second element of this pair
+     *
+     * @return the element
+     */
     public S getSecond() {
         return second;
     }
