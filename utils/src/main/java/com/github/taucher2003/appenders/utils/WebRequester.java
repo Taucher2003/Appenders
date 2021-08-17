@@ -43,7 +43,7 @@ public class WebRequester {
      * Adds a request to the underlying {@link WebRequestExecutor}
      *
      * @param request the request which should be queued
-     * @return a {@link CompletableFuture<String>} which will complete with the response body as string
+     * @return a {@link CompletableFuture} which will complete with the response body as string
      */
     public CompletableFuture<String> request(Request request) {
         CompletableFuture<String> future = new CompletableFuture<>();

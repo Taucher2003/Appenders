@@ -60,6 +60,9 @@ public class DataPair<F, S> {
         return second;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -72,11 +75,17 @@ public class DataPair<F, S> {
         return Objects.equals(first, dataPair.first) && Objects.equals(second, dataPair.second);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return Objects.hash(first, second);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return "DataPair{" +

@@ -40,6 +40,8 @@ public class DiscordBucket extends Bucket {
 
     /**
      * Creates an instance of the DiscordBucket for handling the ratelimit
+     *
+     * @param selfIgnoringMarker the marker used by the calling appender to ignore log messages
      */
     public DiscordBucket(Marker selfIgnoringMarker) {
         this.selfIgnoringMarker = selfIgnoringMarker;

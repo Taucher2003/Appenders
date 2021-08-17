@@ -75,7 +75,7 @@ public abstract class WebRequestExecutor {
     /**
      * Adds a request to the execution queue.
      *
-     * @param request a {@link DataPair} which contains the {@link Request} and a {@link CompletableFuture<String>}
+     * @param request a {@link DataPair} which contains the {@link Request} and a {@link CompletableFuture}
      * @return a boolean indicating if the request has been added to execution queue
      */
     boolean addToQueue(DataPair<Request, CompletableFuture<String>> request) {

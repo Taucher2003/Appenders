@@ -35,6 +35,8 @@ public class GithubBucket extends Bucket {
 
     /**
      * Creates an instance of the GithubBucket for handling the ratelimit
+     *
+     * @param selfIgnoringMarker the marker used by the calling appender to ignore log messages
      */
     public GithubBucket(Marker selfIgnoringMarker) {
         this.selfIgnoringMarker = selfIgnoringMarker;
