@@ -24,27 +24,62 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * Abstract base class for handling ratelimit buckets
+ */
 public abstract class Bucket {
     protected final AtomicInteger remaining = new AtomicInteger();
     protected final AtomicLong resetAt = new AtomicLong(System.currentTimeMillis());
     protected final AtomicLong retryAfter = new AtomicLong();
 
+    /**
+     * Checks if this bucket is currently ratelimited
+     *
+     * @return a boolean indicating the ratelimit status
+     */
     public boolean isRatelimit() {
         return remaining.get() == 0 && System.currentTimeMillis() <= resetAt.get();
     }
 
+    /**
+     * Handles a ratelimited response and updates this bucket with the current data
+     *
+     * @param response the ratelimited response
+     * @throws IOException if reading of the response body fails
+     */
     protected abstract void handleRatelimit(Response response) throws IOException;
 
+    /**
+     * Reads the current ratelimit data from the response and updates this bucket with its data
+     *
+     * @param response the response of the executed request
+     * @throws IOException if reading of the response body fails
+     */
     protected abstract void update(Response response) throws IOException;
 
+    /**
+     * Returns the amount of remaining uses within the ratelimit period
+     *
+     * @return an integer indicating the amount
+     */
     public int getRemaining() {
         return remaining.get();
     }
 
+    /**
+     * Returns the timestamp when the ratelimit resets and the remaining uses are reset to the route maximum
+     *
+     * @return a long holding the timestamp
+     */
     public long getResetAt() {
         return resetAt.get();
     }
 
+    /**
+     * After encountering a ratelimited response this value is set to the amount of milliseconds after which the request may be retried
+     *
+     * @return a long holding the amount of milliseconds
+     */
     public long getRetryAfter() {
         return retryAfter.get();
     }

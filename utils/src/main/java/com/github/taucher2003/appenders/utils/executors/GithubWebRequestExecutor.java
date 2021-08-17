@@ -24,11 +24,21 @@ import com.github.taucher2003.appenders.utils.buckets.GithubBucket;
 import okhttp3.OkHttpClient;
 import org.slf4j.Marker;
 
+/**
+ * The {@link WebRequestExecutor} for Github
+ */
 public class GithubWebRequestExecutor extends WebRequestExecutor {
+
+    /**
+     * {@inheritDoc}
+     */
     public GithubWebRequestExecutor(Marker selfIgnoringMarker, OkHttpClient httpClient) {
         super(selfIgnoringMarker, httpClient);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected Bucket createBucket(Marker selfIgnoringMarker) {
         return new GithubBucket(selfIgnoringMarker);

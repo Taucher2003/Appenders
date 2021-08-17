@@ -24,11 +24,21 @@ import com.github.taucher2003.appenders.utils.buckets.DiscordBucket;
 import okhttp3.OkHttpClient;
 import org.slf4j.Marker;
 
+/**
+ * The {@link WebRequestExecutor} for Discord
+ */
 public class DiscordWebRequestExecutor extends WebRequestExecutor {
+
+    /**
+     * {@inheritDoc}
+     */
     public DiscordWebRequestExecutor(Marker selfIgnoringMarker, OkHttpClient httpClient) {
         super(selfIgnoringMarker, httpClient);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected Bucket createBucket(Marker selfIgnoringMarker) {
         return new DiscordBucket(selfIgnoringMarker);

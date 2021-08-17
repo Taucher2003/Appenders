@@ -36,6 +36,9 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * Abstract base class for web request execution
+ */
 public abstract class WebRequestExecutor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebRequestExecutor.class);
@@ -49,14 +52,32 @@ public abstract class WebRequestExecutor {
     private final AtomicReference<ScheduledFuture<?>> currentQueueExecution = new AtomicReference<>();
     private boolean shuttingDown;
 
+    /**
+     * Creates a new instance of a web request executor
+     *
+     * @param selfIgnoringMarker the marker used by the calling appender to ignore log messages
+     * @param httpClient         the http client to use
+     */
     public WebRequestExecutor(Marker selfIgnoringMarker, OkHttpClient httpClient) {
         this.selfIgnoringMarker = selfIgnoringMarker;
         this.bucket = createBucket(selfIgnoringMarker);
         this.httpClient = httpClient;
     }
 
+    /**
+     * Creates the correct {@link Bucket} instance for the executor
+     *
+     * @param selfIgnoringMarker the marker used by the calling appender to ignore log messages
+     * @return the created Bucket
+     */
     protected abstract Bucket createBucket(Marker selfIgnoringMarker);
 
+    /**
+     * Adds a request to the execution queue.
+     *
+     * @param request a {@link DataPair} which contains the {@link Request} and a {@link CompletableFuture<String>}
+     * @return a boolean indicating if the request has been added to execution queue
+     */
     boolean addToQueue(DataPair<Request, CompletableFuture<String>> request) {
         boolean added = requests.add(request);
         if (added && currentQueueExecution.get() == null) {
@@ -123,6 +144,10 @@ public abstract class WebRequestExecutor {
         return true;
     }
 
+    /**
+     * Marks this executor for shutdown
+     * The shutdown takes part after all requests have been processed
+     */
     public void shutdown() {
         shuttingDown = true;
     }
