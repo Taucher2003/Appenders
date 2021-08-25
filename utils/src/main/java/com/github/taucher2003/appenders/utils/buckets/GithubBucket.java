@@ -24,16 +24,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 
+/**
+ * Implementation class of the {@link Bucket} for GitHub requests
+ */
 public class GithubBucket extends Bucket {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GithubBucket.class);
 
     private final Marker selfIgnoringMarker;
 
+    /**
+     * Creates an instance of the GithubBucket for handling the ratelimit
+     *
+     * @param selfIgnoringMarker the marker used by the calling appender to ignore log messages
+     */
     public GithubBucket(Marker selfIgnoringMarker) {
         this.selfIgnoringMarker = selfIgnoringMarker;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void handleRatelimit(Response response) {
         String retryAfter = response.header("Retry-After");
@@ -49,6 +60,9 @@ public class GithubBucket extends Bucket {
         this.resetAt.set(System.currentTimeMillis() + retryAfterDelay);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void update(Response response) {
         boolean isRatelimited = response.code() == 429;

@@ -23,14 +23,28 @@ import okhttp3.Request;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.RejectedExecutionException;
 
+/**
+ * Wrapper class which controls the underlying {@link WebRequestExecutor}
+ */
 public class WebRequester {
 
     private final WebRequestExecutor executor;
 
+    /**
+     * Creates a new WebRequester
+     *
+     * @param executor the underlying {@link WebRequestExecutor} which should be managed
+     */
     public WebRequester(WebRequestExecutor executor) {
         this.executor = executor;
     }
 
+    /**
+     * Adds a request to the underlying {@link WebRequestExecutor}
+     *
+     * @param request the request which should be queued
+     * @return a {@link CompletableFuture} which will complete with the response body as string
+     */
     public CompletableFuture<String> request(Request request) {
         CompletableFuture<String> future = new CompletableFuture<>();
         DataPair<Request, CompletableFuture<String>> pair = new DataPair<>(request, future);
@@ -41,6 +55,9 @@ public class WebRequester {
         return future;
     }
 
+    /**
+     * Shuts down the underlying {@link WebRequestExecutor}
+     */
     public void shutdown() {
         executor.shutdown();
     }

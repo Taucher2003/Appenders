@@ -29,16 +29,27 @@ import org.slf4j.Marker;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Implementation class of the {@link Bucket} for Discord requests
+ */
 public class DiscordBucket extends Bucket {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DiscordBucket.class);
 
     private final Marker selfIgnoringMarker;
 
+    /**
+     * Creates an instance of the DiscordBucket for handling the ratelimit
+     *
+     * @param selfIgnoringMarker the marker used by the calling appender to ignore log messages
+     */
     public DiscordBucket(Marker selfIgnoringMarker) {
         this.selfIgnoringMarker = selfIgnoringMarker;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void handleRatelimit(Response response) throws IOException {
         String retryAfter = response.header("Retry-After");
@@ -60,6 +71,9 @@ public class DiscordBucket extends Bucket {
         this.resetAt.set(System.currentTimeMillis() + retryAfterDelay);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void update(Response response) throws IOException {
         boolean isRatelimited = response.code() == 429;
