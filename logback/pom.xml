@@ -23,7 +23,7 @@
     <parent>
         <artifactId>appenders</artifactId>
         <groupId>com.github.taucher2003</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -34,6 +34,7 @@
     <properties>
         <maven.compiler.source>${appenders.target}</maven.compiler.source>
         <maven.compiler.target>${appenders.target}</maven.compiler.target>
+        <project.build.sourceEncoding>${appenders.encoding}</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
