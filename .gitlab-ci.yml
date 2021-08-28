@@ -1,0 +1,8 @@
+stages:
+  - deploy
+
+deploy:
+  image: maven:3.8.1-openjdk-8
+  stage: deploy
+  script:
+    - mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.version=$CI_COMMIT_REF_SLUG -Dappenders.deploy.gitlabToken=$CI_JOB_TOKEN -Dappenders.deploy.gitlabUsername=Job-Token deploy

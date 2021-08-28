@@ -24,7 +24,7 @@
             <configuration>
                 <httpHeaders>
                     <property>
-                        <name>Deploy-Token</name>
+                        <name>${appenders.deploy.gitlabUsername}</name>
                         <value>${appenders.deploy.gitlabToken}</value>
                     </property>
                 </httpHeaders>

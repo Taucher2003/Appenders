@@ -41,7 +41,7 @@ jobs:
       - name: Change distribution name
         run: sed -i 's/ossrh/gitlab/g' pom.xml
       - name: Deploy with Maven
-        run: mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.deploy.gitlabToken=${{ secrets.GITLAB_TOKEN }} deploy
+        run: mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.deploy.gitlabToken=${{ secrets.GITLAB_TOKEN }} -Dappenders.deploy.gitlabUsername=Deploy-Token deploy
   deploy_commit:
     runs-on: ubuntu-latest
     environment: gitlab
@@ -57,4 +57,4 @@ jobs:
       - name: Change distribution name
         run: sed -i 's/ossrh/gitlab/g' pom.xml
       - name: Deploy with Maven
-        run: mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.version=${{ github.sha }} -Dappenders.deploy.gitlabToken=${{ secrets.GITLAB_TOKEN }} deploy
+        run: mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.version=${{ github.sha }} -Dappenders.deploy.gitlabToken=${{ secrets.GITLAB_TOKEN }} -Dappenders.deploy.gitlabUsername=Deploy-Token deploy
