@@ -30,7 +30,7 @@ The releases of the Appenders Project are published in the Central repository. \
 If you prefer pinning your version to a branch or commit instead of version numbers, these are deployed in GitLab.
 
 <details>
-<summary>Branch & Commit Versions</summary>
+<summary>Branch, Commit & Snapshot Versions</summary>
 
 If you want to use branch and commit versions, you need to add new repository to your build configuration. \
 This only provides information about the repository and the version information. For the actual dependency, please look below at the framework details.
@@ -54,9 +54,15 @@ repositories {
 }
 ```
 
+### Snapshot Versions
+
+Snapshot versions get deployed on each push to `development`. \
+[Click here](https://gitlab.com/taucher2003-group/appenders/-/packages) to see a list of available versions. 
+The Snapshot versions share a repository with the branch versions.
+
 ### Branch versions
 
-Branch versions have set the version to `<BRANCH_SLUG>-SNAPSHOT`. \
+Branch versions are deployed hourly and have set the version to `<BRANCH_SLUG>-SNAPSHOT`. \
 [Click here](https://gitlab.com/taucher2003-group/appenders/-/packages) to see a list of available versions.
 
 ### Commit versions
