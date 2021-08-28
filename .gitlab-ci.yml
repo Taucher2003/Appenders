@@ -5,4 +5,6 @@ deploy:
   image: maven:3.8.1-openjdk-8
   stage: deploy
   script:
+    - sed -i 's/https:\/\/oss.sonatype.org\/service\/local\/staging\/deploy\/maven2\//https:\/\/gitlab.com\/api\/v4\/projects\/29199582\/packages\/maven/g' pom.xml
+    - sed -i 's/ossrh/gitlab/g' pom.xml
     - mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.rawVersion=$CI_COMMIT_REF_SLUG -Dappenders.deploy.gitlabToken=$CI_JOB_TOKEN -Dappenders.deploy.gitlabUsername=Job-Token deploy
