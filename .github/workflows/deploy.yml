@@ -27,7 +27,7 @@ jobs:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
   deploy_snapshot:
     runs-on: ubuntu-latest
-    environment: sonatype
+    environment: gitlab
     if: ${{ github.ref == 'refs/heads/development' }}
     steps:
       - uses: actions/checkout@v2
@@ -36,20 +36,17 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
-          server-id: ossrh
-          server-username: OSSRH_USERNAME
-          server-password: OSSRH_PASSWORD
-          gpg-private-key: ${{ secrets.GPG_KEY }}
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+          server-id: gitlab
+          server-username: GITLAB_USERNAME
+          server-password: GITLAB_PASSWORD
       - name: Deploy with Maven
         run: mvn --batch-mode --update-snapshots deploy
         env:
-          OSSRH_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GITLAB_USERNAME: ${{ secrets.GITLAB_USERNAME }}
+          GITLAB_PASSWORD: ${{ secrets.GITLAB_TOKEN }}
   deploy_commit:
     runs-on: ubuntu-latest
-    environment: sonatype
+    environment: gitlab
     if: ${{ github.ref != 'refs/heads/development' && github.ref != 'refs/heads/master' }}
     steps:
       - uses: actions/checkout@v2
@@ -58,21 +55,17 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
-          server-id: ossrh
-          server-username: OSSRH_USERNAME
-          server-password: OSSRH_PASSWORD
-          gpg-private-key: ${{ secrets.GPG_KEY2 }}
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+          server-id: gitlab
+          server-username: GITLAB_USERNAME
+          server-password: GITLAB_PASSWORD
       - name: Deploy with Maven
         run: mvn --batch-mode --update-snapshots -Dappenders.version=${{ github.sha }} deploy
         env:
-          OSSRH_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GITLAB_USERNAME: ${{ secrets.GITLAB_USERNAME }}
+          GITLAB_PASSWORD: ${{ secrets.GITLAB_TOKEN }}
   deploy_branch:
     runs-on: ubuntu-latest
-    environment: sonatype
-    if: ${{ github.ref != 'refs/heads/development' && github.ref != 'refs/heads/master' }}
+    environment: gitlab
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 11
@@ -80,14 +73,11 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
-          server-id: ossrh
-          server-username: OSSRH_USERNAME
-          server-password: OSSRH_PASSWORD
-          gpg-private-key: ${{ secrets.GPG_KEY2 }}
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+          server-id: gitlab
+          server-username: GITLAB_USERNAME
+          server-password: GITLAB_PASSWORD
       - name: Deploy with Maven
-        run: mvn --batch-mode --update-snapshots -Dappenders.releaseType=-${{ github.sha }}-SNAPSHOT deploy
+        run: mvn --batch-mode --update-snapshots -Dappenders.version=${{ github.ref }}-SNAPSHOT deploy
         env:
-          OSSRH_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GITLAB_USERNAME: ${{ secrets.GITLAB_USERNAME }}
+          GITLAB_PASSWORD: ${{ secrets.GITLAB_TOKEN }}

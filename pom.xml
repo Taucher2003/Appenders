@@ -69,8 +69,8 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>gitlab</id>
+            <url>https://gitlab.com/api/v4/projects/29199582/packages/maven</url>
         </snapshotRepository>
         <repository>
             <id>ossrh</id>
