@@ -25,7 +25,7 @@
     <groupId>com.github.taucher2003</groupId>
     <artifactId>appenders</artifactId>
     <packaging>pom</packaging>
-    <version>1.1-SNAPSHOT</version>
+    <version>${appenders.version}</version>
     <modules>
         <module>logback</module>
         <module>utils</module>
@@ -35,7 +35,9 @@
     </modules>
 
     <properties>
-        <appenders.version>1.1-SNAPSHOT</appenders.version>
+        <appenders.version>${appenders.rawVersion}${appenders.releaseType}</appenders.version>
+        <appenders.releaseType>-SNAPSHOT</appenders.releaseType>
+        <appenders.rawVersion>1.1</appenders.rawVersion>
         <appenders.target>8</appenders.target>
         <appenders.encoding>UTF-8</appenders.encoding>
         <maven.compiler.source>${appenders.target}</maven.compiler.source>
@@ -68,8 +70,8 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>gitlab</id>
+            <url>https://gitlab.com/api/v4/projects/29199582/packages/maven</url>
         </snapshotRepository>
         <repository>
             <id>ossrh</id>
@@ -103,6 +105,31 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.1.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
