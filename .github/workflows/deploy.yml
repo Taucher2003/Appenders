@@ -5,6 +5,7 @@ on: [ push, workflow_dispatch ]
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: sonatype
     #if: ${{ github.ref == 'refs/heads/development' }}
     steps:
       - uses: actions/checkout@v2
@@ -16,13 +17,11 @@ jobs:
           server-id: ossrh
           server-username: OSSRH_USERNAME
           server-password: OSSRH_PASSWORD
-      - name: Import GPG Key
-        uses: crazy-max/ghaction-import-gpg@v1
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_KEY }}
-          PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          gpg-private-key: ${{ secrets.GPG_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: Deploy with Maven
         run: mvn --batch-mode --update-snapshots deploy
         env:
           OSSRH_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
