@@ -36,19 +36,12 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
-          server-id: gitlab
-          server-username: GITLAB_USERNAME
-          server-password: GITLAB_PASSWORD
-          gpg-private-key: ${{ secrets.GPG_KEY }}
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: Change distribution location
         run: sed -i 's/https:\/\/oss.sonatype.org\/service\/local\/staging\/deploy\/maven2\//https:\/\/gitlab.com\/api\/v4\/projects\/29199582\/packages\/maven/g' pom.xml
+      - name: Change distribution name
+        run: sed -i 's/ossrh/gitlab/g' pom.xml
       - name: Deploy with Maven
-        run: mvn --batch-mode --update-snapshots deploy
-        env:
-          GITLAB_USERNAME: ${{ secrets.GITLAB_USERNAME }}
-          GITLAB_PASSWORD: ${{ secrets.GITLAB_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.deploy.gitlabToken=${{ secrets.GITLAB_TOKEN }} deploy
   deploy_commit:
     runs-on: ubuntu-latest
     environment: gitlab
@@ -59,32 +52,31 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
-#          gpg-private-key: ${{ secrets.GPG_KEY2 }}
-#          gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: Change distribution location
         run: sed -i 's/https:\/\/oss.sonatype.org\/service\/local\/staging\/deploy\/maven2\//https:\/\/gitlab.com\/api\/v4\/projects\/29199582\/packages\/maven/g' pom.xml
       - name: Change distribution name
         run: sed -i 's/ossrh/gitlab/g' pom.xml
       - name: Deploy with Maven
         run: mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.version=${{ github.sha }} -Dappenders.deploy.gitlabToken=${{ secrets.GITLAB_TOKEN }} deploy
-#        env:
-#          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-#  deploy_branch:
-#    runs-on: ubuntu-latest
-#    environment: gitlab
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Set up JDK 11
-#        uses: actions/setup-java@v2
-#        with:
-#          java-version: 11
-#          distribution: temurin
-#          server-id: gitlab
-#          server-username: GITLAB_USERNAME
-#          server-password: GITLAB_PASSWORD
-#          gpg-private-key: ${{ secrets.GPG_KEY }}
-#      - name: Deploy with Maven
-#        run: mvn --batch-mode --update-snapshots -Dappenders.version=${{ github.ref }}-SNAPSHOT deploy
-#        env:
-#          GITLAB_USERNAME: ${{ secrets.GITLAB_USERNAME }}
-#          GITLAB_PASSWORD: ${{ secrets.GITLAB_TOKEN }}
+  deploy_branch:
+    runs-on: ubuntu-latest
+    environment: gitlab
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: temurin
+      - name: Change distribution location
+        run: sed -i 's/https:\/\/oss.sonatype.org\/service\/local\/staging\/deploy\/maven2\//https:\/\/gitlab.com\/api\/v4\/projects\/29199582\/packages\/maven/g' pom.xml
+      - name: Change distribution name
+        run: sed -i 's/ossrh/gitlab/g' pom.xml
+      - name: Apply branch version name
+        run: sed -i 's/<appenders.version>${appenders.rawVersion}<\/appenders.version>/${{ github.ref }}/g' pom.xml
+      - name: Remove github prefixes from version
+        run: sed -i 's/refs\/heads\///g' pom.xml
+      - name: Remove github prefixes from version 2
+        run: sed -i 's/refs\/tags\///g' pom.xml
+      - name: Deploy with Maven
+        run: mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.deploy.gitlabToken=${{ secrets.GITLAB_TOKEN }} deploy
