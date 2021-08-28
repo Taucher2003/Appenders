@@ -3,6 +3,7 @@ name: Appender Request
 about: Suggest a new Appender
 labels: "topic: appender", "type: enhancement"
 ---
+
 # Appender Request
 
 ## Which platform should the Appender target?

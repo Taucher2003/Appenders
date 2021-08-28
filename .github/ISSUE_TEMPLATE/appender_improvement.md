@@ -3,6 +3,7 @@ name: Appender Improvement
 about: Improve an existing Appender
 labels: "topic: appender", "type: improvement"
 ---
+
 # Appender Improvement
 
 ## Which appender should be improved?
