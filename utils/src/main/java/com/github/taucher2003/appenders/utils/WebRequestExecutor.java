@@ -101,11 +101,12 @@ public abstract class WebRequestExecutor {
                 delayQueue();
                 break;
             }
-            DataPair<Request, CompletableFuture<String>> request = requests.poll();
+            DataPair<Request, CompletableFuture<String>> request = requests.peek();
             boolean successful = executePair(request);
             if (!successful) {
                 break;
             }
+            requests.poll();
         }
         currentQueueExecution.set(null);
         if (shuttingDown && requests.isEmpty()) {

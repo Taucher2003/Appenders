@@ -25,7 +25,7 @@
     <groupId>com.github.taucher2003</groupId>
     <artifactId>appenders</artifactId>
     <packaging>pom</packaging>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
     <modules>
         <module>logback</module>
         <module>utils</module>
@@ -35,7 +35,7 @@
     </modules>
 
     <properties>
-        <appenders.version>1.0</appenders.version>
+        <appenders.version>1.1-SNAPSHOT</appenders.version>
         <appenders.target>8</appenders.target>
         <appenders.encoding>UTF-8</appenders.encoding>
         <maven.compiler.source>${appenders.target}</maven.compiler.source>
