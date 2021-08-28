@@ -41,6 +41,8 @@ jobs:
           server-password: GITLAB_PASSWORD
           gpg-private-key: ${{ secrets.GPG_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
+      - name: Change distribution location
+        run: sed -i 's/https:\/\/oss.sonatype.org\/service\/local\/staging\/deploy\/maven2\//https:\/\/gitlab.com\/api\/v4\/projects\/29199582\/packages\/maven/g' pom.xml
       - name: Deploy with Maven
         run: mvn --batch-mode --update-snapshots deploy
         env:
@@ -63,6 +65,8 @@ jobs:
           server-password: GITLAB_PASSWORD
           gpg-private-key: ${{ secrets.GPG_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
+      - name: Change distribution location
+        run: sed -i 's/https:\/\/oss.sonatype.org\/service\/local\/staging\/deploy\/maven2\//https:\/\/gitlab.com\/api\/v4\/projects\/29199582\/packages\/maven/g' pom.xml
       - name: Deploy with Maven
         run: mvn --batch-mode --update-snapshots -Dappenders.version=${{ github.sha }} deploy
         env:
