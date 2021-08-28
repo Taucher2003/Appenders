@@ -7,4 +7,5 @@ deploy:
   script:
     - sed -i 's/https:\/\/oss.sonatype.org\/service\/local\/staging\/deploy\/maven2\//https:\/\/gitlab.com\/api\/v4\/projects\/29199582\/packages\/maven/g' pom.xml
     - sed -i 's/ossrh/gitlab/g' pom.xml
+    - sed -i 's/<appenders.version>${appenders.rawVersion}${appenders.releaseType}<\/appenders.version>/<appenders.version>$CI_COMMIT_REF_SLUG<\/appenders.version>/g' pom.xml
     - mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.rawVersion=$CI_COMMIT_REF_SLUG -Dappenders.deploy.gitlabToken=$CI_JOB_TOKEN -Dappenders.deploy.gitlabUsername=Job-Token deploy
