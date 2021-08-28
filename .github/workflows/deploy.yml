@@ -67,7 +67,7 @@ jobs:
         run: sed -i 's/ossrh/gitlab/g' pom.xml
       - name: Deploy with Maven
         run: mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.version=${{ github.sha }} -Dappenders.deploy.gitlabToken=${{ secrets.GITLAB_TOKEN }} deploy
-        env:
+#        env:
 #          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 #  deploy_branch:
 #    runs-on: ubuntu-latest
