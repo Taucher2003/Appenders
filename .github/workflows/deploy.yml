@@ -12,5 +12,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+          server-id: ossrh
+          server-username: ${{ secrets.SONATYPE_USERNAME }}
+          server-password: ${{ secrets.SONATYPE_PASSWORD }}
+          gpg-private-key: ${{ secrets.GPG_KEY }}
+          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - name: Deploy with Maven
-        run: mvn --batch-mode --update-snapshots -Dsonatype.username=${{ secrets.SONATYPE_USERNAME }} -Dsonatype.password=${{ secrets.SONATYPE_PASSWORD }} -s .github/workflows/maven_development.xml deploy
+        run: mvn --batch-mode --update-snapshots deploy
