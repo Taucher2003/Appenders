@@ -59,7 +59,7 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
-          gpg-private-key: ${{ secrets.GPG_KEY }}
+          gpg-private-key: ${{ secrets.GPG_KEY2 }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: Change distribution location
         run: sed -i 's/https:\/\/oss.sonatype.org\/service\/local\/staging\/deploy\/maven2\//https:\/\/gitlab.com\/api\/v4\/projects\/29199582\/packages\/maven/g' pom.xml
