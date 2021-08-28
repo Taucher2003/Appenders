@@ -16,10 +16,11 @@ jobs:
           server-id: ossrh
           server-username: OSSRH_USERNAME
           server-password: OSSRH_PASSWORD
-      - name: Configure GPG Key
-        run: echo -n "$GPG_KEY" | base64 --decode | gpg --import
+      - name: Import GPG Key
+        uses: crazy-max/ghaction-import-gpg@v1
         env:
-          GPG_KEY: ${{ secrets.GPG_KEY2 }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_KEY }}
+          PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       - name: Deploy with Maven
         run: mvn --batch-mode --update-snapshots deploy
         env:
