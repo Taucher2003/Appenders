@@ -38,7 +38,7 @@ public final class Log4JIssueAppender extends AbstractLog4JGitlabAppender<IssueA
     }
 
     private Log4JIssueAppender(String name, String baseUrl, String repositoryId, String accessToken, boolean confidential, Filter filter, boolean ignoreExceptions) {
-        super(new IssueAppender(), baseUrl, repositoryId, accessToken, name, filter, null, ignoreExceptions, null);
+        super(new IssueAppender(), name, baseUrl, repositoryId, accessToken, filter, null, ignoreExceptions, null);
         delegate.setConfidential(confidential);
     }
 

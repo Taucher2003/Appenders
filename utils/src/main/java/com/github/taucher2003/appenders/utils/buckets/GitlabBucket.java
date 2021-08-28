@@ -49,7 +49,7 @@ public class GitlabBucket extends Bucket {
      */
     @Override
     protected void handleRatelimit(Response response) throws IOException {
-
+        // we get no ratelimit information from gitlab :(
     }
 
     /**
@@ -57,7 +57,7 @@ public class GitlabBucket extends Bucket {
      */
     @Override
     protected void update(Response response) throws IOException {
-
+        // we get no ratelimit information from gitlab :(
     }
 
     @Override

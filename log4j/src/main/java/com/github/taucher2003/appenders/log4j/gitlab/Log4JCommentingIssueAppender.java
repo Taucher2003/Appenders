@@ -27,7 +27,7 @@ import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 
-@Plugin(name = "GitlabIssue", category = Core.CATEGORY_NAME, elementType = Appender.ELEMENT_TYPE)
+@Plugin(name = "GitlabCommentingIssue", category = Core.CATEGORY_NAME, elementType = Appender.ELEMENT_TYPE)
 public final class Log4JCommentingIssueAppender extends AbstractLog4JGitlabAppender<CommentingIssueAppender> {
 
     // legacy support for log4j version before 2.11.2
@@ -38,7 +38,7 @@ public final class Log4JCommentingIssueAppender extends AbstractLog4JGitlabAppen
     }
 
     private Log4JCommentingIssueAppender(String name, String baseUrl, String repositoryId, String accessToken, boolean confidential, Filter filter, boolean ignoreExceptions) {
-        super(new CommentingIssueAppender(), baseUrl, repositoryId, accessToken, name, filter, null, ignoreExceptions, null);
+        super(new CommentingIssueAppender(), name, baseUrl, repositoryId, accessToken, filter, null, ignoreExceptions, null);
         delegate.setConfidential(confidential);
     }
 
@@ -46,7 +46,7 @@ public final class Log4JCommentingIssueAppender extends AbstractLog4JGitlabAppen
     public static Log4JCommentingIssueAppender createAppender(
             @PluginAttribute("name") String name,
             @PluginAttribute("ignoreExceptions") boolean ignoreExceptions,
-            @PluginAttribute(value = "baseUrl", defaultString = "https://api.github.com") String baseUrl,
+            @PluginAttribute(value = "baseUrl", defaultString = "https://gitlab.com") String baseUrl,
             @PluginAttribute(value = "repositoryId") String repositoryId,
             @PluginAttribute(value = "accessToken", sensitive = true) String accessToken,
             @PluginAttribute(value = "confidential") boolean confidential,
