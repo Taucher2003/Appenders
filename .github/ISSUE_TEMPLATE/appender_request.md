@@ -1,7 +1,7 @@
 ---
 name: Appender Request
 about: Suggest a new Appender
-labels: "topic: appender", "type: enhancement"
+labels: "topic: appender, type: enhancement"
 ---
 
 # Appender Request

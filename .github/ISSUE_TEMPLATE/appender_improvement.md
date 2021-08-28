@@ -1,7 +1,7 @@
 ---
 name: Appender Improvement
 about: Improve an existing Appender
-labels: "topic: appender", "type: improvement"
+labels: "topic: appender, type: improvement"
 ---
 
 # Appender Improvement

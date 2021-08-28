@@ -1,7 +1,7 @@
 ---
 name: Logging Framework Request
 about: Suggest support for a new Logging Framework
-labels: "topic: logging framework", "type: enhancement"
+labels: "topic: logging framework, type: enhancement"
 ---
 
 # Logging Framework Request
