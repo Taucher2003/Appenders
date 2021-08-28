@@ -32,9 +32,6 @@ public class IssueAppender extends AbstractGithubAppender {
 
     protected List<String> labels = new ArrayList<>();
 
-    public IssueAppender() {
-    }
-
     @Override
     protected void startInternally() {
     }
