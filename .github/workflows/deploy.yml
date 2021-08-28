@@ -52,7 +52,6 @@ jobs:
   deploy_commit:
     runs-on: ubuntu-latest
     environment: gitlab
-    if: ${{ github.ref != 'refs/heads/development' && github.ref != 'refs/heads/master' }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 11
@@ -60,18 +59,15 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
-          server-id: gitlab
-          server-username: GITLAB_USERNAME
-          server-password: GITLAB_PASSWORD
           gpg-private-key: ${{ secrets.GPG_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: Change distribution location
         run: sed -i 's/https:\/\/oss.sonatype.org\/service\/local\/staging\/deploy\/maven2\//https:\/\/gitlab.com\/api\/v4\/projects\/29199582\/packages\/maven/g' pom.xml
+      - name: Change distribution name
+        run: sed -i 's/ossrh/gitlab/g' pom.xml
       - name: Deploy with Maven
-        run: mvn --batch-mode --update-snapshots -Dappenders.version=${{ github.sha }} deploy
+        run: mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dappenders.version=${{ github.sha }} -Dappenders.deploy.gitlabToken=${{ secrets.GITLAB_TOKEN }} deploy
         env:
-          GITLAB_USERNAME: ${{ secrets.GITLAB_USERNAME }}
-          GITLAB_PASSWORD: ${{ secrets.GITLAB_TOKEN }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 #  deploy_branch:
 #    runs-on: ubuntu-latest
