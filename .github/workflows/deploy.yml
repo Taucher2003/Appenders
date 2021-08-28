@@ -13,4 +13,4 @@ jobs:
         with:
           java-version: 11
       - name: Deploy with Maven
-        run: mvn --batch-mode --update-snapshots -Dsonatype.username=${{ secrets.SONATYPE_USERNAME }} -Dsonatype.password=${{ secrets.SONATYPE_PASSWORD }} -s .github/workflows/maven_development.xml publish
+        run: mvn --batch-mode --update-snapshots -Dsonatype.username=${{ secrets.SONATYPE_USERNAME }} -Dsonatype.password=${{ secrets.SONATYPE_PASSWORD }} -s .github/workflows/maven_development.xml deploy
