@@ -21,6 +21,8 @@ more are planned.
 | DiscordBot | Sends log entries via Bot account to a Discord channel |
 | GithubIssue | Creates an issue for exceptions on a Github Repository |
 | GithubCommentingIssue | Creates an issue for exceptions on a Github Repository, but tries to prevent duplicated issues |
+| GitlabIssue | Creates an issue for exceptions on a Gitlab Repository |
+| GitlabCommentingIssue | Creates an issue for exceptions on a Gitlab Repository, but tries to prevent duplicated issues |
 
 ## ⚡ Installation
 
@@ -195,6 +197,54 @@ by this appender. The log level does not matter.
 </details>
 
 <details>
+<summary>Log4J Gitlab</summary>
+
+You need to create a new appender in your `log4j2.xml` configuration. \
+As plugin, you can choose between `GitlabIssue` and `GitlabCommentingIssue`.
+
+Both of them require the settings `baseUrl`, `repositoryId`, `accessToken` and `confidential`. \
+`baseUrl` is the base url of the GitLab instance. For gitlab.com users, this would be `https://gitlab.com`.
+`repositoryId` defines the id of the repository, which will be used to create the issues. The `accessToken` will be used
+for authorization. The issues will be created with the account, where the access token belongs to. If `confidential` is
+set to true, the issues will be created as confidential issue, so they are hidden from guest users.
+
+This appender will only log events which have a throwable attached. All log events without a throwable will be dropped
+by this appender. The log level does not matter.
+
+#### Example Configuration with both appenders
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="[...]" shutdownHook="[...]" packages="[...]">
+    <Appenders>
+        [...] existing appenders
+
+        <GitlabIssue name="GitlabIssue"
+                     baseUrl="https://gitlab.com"
+                     repositoryId="1"
+                     accessToken="[your access token]"
+                     confidential="true"/>
+
+        <GitlabCommentingIssue name="GitlabCommentingIssue"
+                               baseUrl="https://gitlab.com"
+                               repositoryId="1"
+                               accessToken="[your access token]"/>
+
+    </Appenders>
+    <Loggers>
+        <Root level="[...]">
+            [...] existing loggers
+
+            <AppenderRef ref="GitlabIssue"/>
+            <AppenderRef ref="GitlabCommentingIssue"/>
+        </Root>
+    </Loggers>
+</Configuration>
+```
+
+</details>
+
+<details>
 <summary>Logback Discord</summary>
 
 You need to create a new appender in your `logback.xml` configuration. \
@@ -286,6 +336,49 @@ Same applies to `level` and `ignoredMarker`. \
     <root level="INFO">
         [...] other existing appenders
         <appender-ref ref="github-issues"/>
+    </root>
+</configuration>
+```
+
+</details>
+
+<details>
+<summary>Logback Gitlab</summary>
+
+You need to create a new appender in your `logback.xml` configuration. \
+As class, you can choose between `com.github.taucher2003.appenders.logback.gitlab.LogbackIssueAppender`
+and `com.github.taucher2003.appenders.logback.gitlab.LogbackCommentingIssueAppender`.
+
+Both of them require the settings `baseUrl`, `repositoryId`, `accessToken` and `confidential`. \
+`baseUrl` is the base url of the GitLab instance. For gitlab.com users, this would be `https://gitlab.com`.
+`repositoryId` defines the id of the repository, which will be used to create the issues. The `accessToken` will be used
+for authorization. The issues will be created with the account, where the access token belongs to. If `confidential` is
+set to true, the issues will be created as confidential issue, so they are hidden from guest users.
+
+This appender will only log events which have a throwable attached. All log events without a throwable will be dropped
+by this appender.
+
+If no values have been set for `marker`, all log events will be handled by the logger. If at least one `marker` has been
+set, only log events with a marker named like one in the list will be handled and log events without or with other
+markers will be dropped by this logger. \
+Same applies to `level` and `ignoredMarker`. \
+`level` is used to filter for logging levels and `ignoredMarker` will set markers, which will be dropped.
+
+#### Example Issue Configuration
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    [...] existing configuration
+    <appender name="gitlab-issues" class="com.github.taucher2003.appenders.logback.gitlab.LogbackIssueAppender">
+        <baseUrl>https://gitlab.com</baseUrl>
+        <repositoryId>1</repositoryId>
+        <accessToken>[your access token]</accessToken>
+        <confidential>true</confidential>
+    </appender>
+    <root level="INFO">
+        [...] other existing appenders
+        <appender-ref ref="gitlab-issues"/>
     </root>
 </configuration>
 ```
