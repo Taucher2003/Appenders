@@ -27,7 +27,7 @@ jobs:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
   deploy_snapshot:
     runs-on: ubuntu-latest
-    environment: gitlab
+    environment: gitlab-snapshot
     if: ${{ github.ref == 'refs/heads/development' }}
     steps:
       - uses: actions/checkout@v2
@@ -44,7 +44,7 @@ jobs:
         run: mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.deploy.gitlabToken=${{ secrets.GITLAB_TOKEN }} -Dappenders.deploy.gitlabUsername=Deploy-Token deploy
   deploy_commit:
     runs-on: ubuntu-latest
-    environment: gitlab
+    environment: gitlab-commit
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 11
@@ -59,4 +59,4 @@ jobs:
       - name: Change version
         run: sed -i 's/<appenders.version>${appenders.rawVersion}${appenders.releaseType}<\/appenders.version>/<appenders.version>${{ github.sha }}<\/appenders.version>/g' pom.xml
       - name: Deploy with Maven
-        run: mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.version=${{ github.sha }} -Dappenders.deploy.gitlabToken=${{ secrets.GITLAB_TOKEN_COMMIT }} -Dappenders.deploy.gitlabUsername=Deploy-Token deploy
+        run: mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.version=${{ github.sha }} -Dappenders.deploy.gitlabToken=${{ secrets.GITLAB_TOKEN }} -Dappenders.deploy.gitlabUsername=Deploy-Token deploy
