@@ -31,6 +31,9 @@
     <artifactId>core</artifactId>
     <version>${appenders.version}</version>
 
+    <name>Appenders Project Core</name>
+    <description>Core of the Appenders Project. Holds all actual appenders. Gets called by the implementation modules.</description>
+
     <properties>
         <maven.compiler.source>${appenders.target}</maven.compiler.source>
         <maven.compiler.target>${appenders.target}</maven.compiler.target>

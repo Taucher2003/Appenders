@@ -31,6 +31,9 @@
     <artifactId>utils</artifactId>
     <version>${appenders.version}</version>
 
+    <name>Appenders Utilities</name>
+    <description>Utilities for the Appenders Project. Mostly used by the core module.</description>
+
     <properties>
         <maven.compiler.source>${appenders.target}</maven.compiler.source>
         <maven.compiler.target>${appenders.target}</maven.compiler.target>

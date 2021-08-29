@@ -45,8 +45,8 @@
         <project.build.sourceEncoding>${appenders.encoding}</project.build.sourceEncoding>
     </properties>
 
-    <name>Various Logging Appenders</name>
-    <description>Various Logging Appenders which can append to e.g. discord webhooks</description>
+    <name>Appenders Project Parent</name>
+    <description>Parent of the Appenders Project. Defines shared dependencies and build process.</description>
     <url>https://github.com/Taucher2003/Appenders</url>
     <licenses>
         <license>

@@ -31,6 +31,9 @@
     <artifactId>log4j</artifactId>
     <version>${appenders.version}</version>
 
+    <name>Log4J Appenders</name>
+    <description>Log4J implementation of the Appenders Project. Delegates it's work to the core module.</description>
+
     <properties>
         <maven.compiler.source>${appenders.target}</maven.compiler.source>
         <maven.compiler.target>${appenders.target}</maven.compiler.target>
