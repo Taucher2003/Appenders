@@ -5,7 +5,8 @@ deploy:
   image: maven:3.8.1-openjdk-8
   stage: deploy
   script:
-    - sed -i 's/https:\/\/oss.sonatype.org\/service\/local\/staging\/deploy\/maven2\//https:\/\/gitlab.com\/api\/v4\/projects\/29199582\/packages\/maven/g' pom.xml
+    - sed -i 's/https:\/\/oss.sonatype.org\/service\/local\/staging\/deploy\/maven2\//https:\/\/gitlab.com\/api\/v4\/projects\/29206055\/packages\/maven/g' pom.xml
+    - sed -i 's/https:\/\/gitlab.com\/api\/v4\/projects\/29199582\/packages\/maven/https:\/\/gitlab.com\/api\/v4\/projects\/29206055\/packages\/maven/g' pom.xml
     - sed -i 's/ossrh/gitlab/g' pom.xml
     - TEXT='${appenders.rawVersion}${appenders.releaseType}'
     - sed -i "s/<appenders.version>${TEXT}<\/appenders.version>/<appenders.version>$CI_COMMIT_REF_SLUG-SNAPSHOT<\/appenders.version>/g" pom.xml

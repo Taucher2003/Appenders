@@ -57,13 +57,12 @@ repositories {
 ### Snapshot Versions
 
 Snapshot versions get deployed on each push to `development`. \
-[Click here](https://gitlab.com/taucher2003-group/appenders/-/packages) to see a list of available versions. 
-The Snapshot versions share a repository with the branch versions.
+[Click here](https://gitlab.com/taucher2003-group/appenders/-/packages) to see a list of available versions.
 
 ### Branch versions
 
 Branch versions are deployed hourly and have set the version to `<BRANCH_SLUG>-SNAPSHOT`. \
-[Click here](https://gitlab.com/taucher2003-group/appenders/-/packages) to see a list of available versions.
+[Click here](https://gitlab.com/taucher2003-group/appenders-branch/-/packages) to see a list of available versions.
 
 ### Commit versions
 
