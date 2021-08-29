@@ -31,6 +31,9 @@
     <artifactId>all</artifactId>
     <version>${appenders.version}</version>
 
+    <name>All Appenders Implementations</name>
+    <description>Convenience module to load all implementations of the Appenders Project.</description>
+
     <properties>
         <maven.compiler.source>${appenders.target}</maven.compiler.source>
         <maven.compiler.target>${appenders.target}</maven.compiler.target>
