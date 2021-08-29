@@ -61,7 +61,8 @@ Snapshot versions get deployed on each push to `development`. \
 
 ### Branch versions
 
-Branch versions are deployed hourly and have set the version to `<BRANCH_SLUG>-SNAPSHOT`. \
+Branch versions are deployed every hour if the deployed version is out of date. \
+They have set the version to `<BRANCH_SLUG>-SNAPSHOT`. \
 [Click here](https://gitlab.com/taucher2003-group/appenders-branch/-/packages) to see a list of available versions.
 
 ### Commit versions
