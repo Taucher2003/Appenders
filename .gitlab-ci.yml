@@ -14,7 +14,8 @@ deploy:
     - sed -i "s/<appenders.version>${TEXT}<\/appenders.version>/<appenders.version>$CI_COMMIT_REF_SLUG-SNAPSHOT<\/appenders.version>/g" pom.xml
     - mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.deploy.gitlabToken=$CI_JOB_TOKEN -Dappenders.deploy.gitlabUsername=Job-Token deploy
   rules:
-    - if: $CI_PROJECT_NAME == "Appenders-Branch"
+    - if: $BRANCH_DEPLOYMENT
+      when: always
 
 # Disabled in the Appenders-Branch project via repository variables
 include:
