@@ -46,6 +46,7 @@ jobs:
         run: mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.deploy.gitlabToken=${{ secrets.GITLAB_TOKEN }} -Dappenders.deploy.gitlabUsername=Deploy-Token deploy
   deploy_commit:
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
     environment:
       name: gitlab-commit
       url: https://gitlab.com/taucher2003-group/appenders-commit/-/packages
