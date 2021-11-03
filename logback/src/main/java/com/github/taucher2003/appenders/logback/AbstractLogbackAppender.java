@@ -36,7 +36,15 @@ public abstract class AbstractLogbackAppender<T extends AbstractAppender> extend
 
     @Override
     protected void append(ILoggingEvent eventObject) {
-        LogEntry.Builder builder = LogEntry.builder()
+        delegate.append(buildLogEntry(eventObject));
+    }
+
+    private LogLevel fromLogback(Level level) {
+        return LogLevel.fromString(level.levelStr, LogLevel.DEBUG);
+    }
+
+    protected LogEntry<ILoggingEvent> buildLogEntry(ILoggingEvent eventObject) {
+        LogEntry.Builder<ILoggingEvent> builder = LogEntry.builder(ILoggingEvent.class)
                 .threadName(eventObject.getThreadName())
                 .level(fromLogback(eventObject.getLevel()))
                 .message(eventObject.getMessage())
@@ -47,12 +55,9 @@ public abstract class AbstractLogbackAppender<T extends AbstractAppender> extend
         }
         builder.marker(eventObject.getMarker())
                 .timestamp(eventObject.getTimeStamp())
-                .build();
-        delegate.append(builder.build());
-    }
+                .t(eventObject);
 
-    private LogLevel fromLogback(Level level) {
-        return LogLevel.fromString(level.levelStr, LogLevel.DEBUG);
+        return builder.build();
     }
 
     public void setFlushInterval(String flushInterval) {

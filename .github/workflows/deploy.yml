@@ -19,6 +19,8 @@ jobs:
           server-password: OSSRH_PASSWORD
           gpg-private-key: ${{ secrets.GPG_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
+      - name: Change version
+        run: sed -i 's/<appenders.version>${appenders.rawVersion}${appenders.releaseType}<\/appenders.version>/<appenders.version>${appenders.rawVersion}<\/appenders.version>/g' pom.xml
       - name: Deploy with Maven
         run: mvn --batch-mode --update-snapshots -Dappenders.releaseType= deploy
         env:

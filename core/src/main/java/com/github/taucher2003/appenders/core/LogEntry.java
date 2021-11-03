@@ -24,7 +24,7 @@ import org.slf4j.helpers.MessageFormatter;
 
 import java.util.Arrays;
 
-public final class LogEntry {
+public final class LogEntry<T> {
 
     private final String threadName;
     private final LogLevel level;
@@ -35,9 +35,10 @@ public final class LogEntry {
     private final Throwable throwable;
     private final Marker marker;
     private final long timestamp;
+    private final T t;
 
     private LogEntry(String threadName, LogLevel level, String messageFormat, Object[] argumentArray, String formattedMessage,
-                     String loggerName, Throwable throwable, Marker marker, long timestamp) {
+                     String loggerName, Throwable throwable, Marker marker, long timestamp, T t) {
         this.threadName = threadName;
         this.level = level;
         this.messageFormat = messageFormat;
@@ -46,6 +47,7 @@ public final class LogEntry {
         this.throwable = throwable;
         this.marker = marker;
         this.timestamp = timestamp;
+        this.t = t;
         this.formattedMessage = Utilities.firstNotNull(formattedMessage, MessageFormatter.arrayFormat(messageFormat, argumentArray).getMessage());
     }
 
@@ -85,6 +87,10 @@ public final class LogEntry {
         return timestamp;
     }
 
+    public T getT() {
+        return t;
+    }
+
     @Override
     public String toString() {
         return "LogEntry{" +
@@ -97,14 +103,19 @@ public final class LogEntry {
                 ", throwable=" + throwable +
                 ", marker=" + marker +
                 ", timestamp=" + timestamp +
+                ", t=" + t +
                 '}';
     }
 
-    public static Builder builder() {
-        return new Builder();
+    public static Builder<Void> builder() {
+        return builder(Void.class);
     }
 
-    public static class Builder {
+    public static <T> Builder<T> builder(@SuppressWarnings("unused") /* used for generic type */ Class<T> type) {
+        return new Builder<>();
+    }
+
+    public static class Builder<T> {
 
         private String threadName;
         private LogLevel level;
@@ -115,54 +126,60 @@ public final class LogEntry {
         private Throwable throwable;
         private Marker marker;
         private long timestamp;
+        private T t;
 
-        public Builder threadName(String threadName) {
+        public Builder<T> threadName(String threadName) {
             this.threadName = threadName;
             return this;
         }
 
-        public Builder level(LogLevel level) {
+        public Builder<T> level(LogLevel level) {
             this.level = level;
             return this;
         }
 
-        public Builder message(String message) {
+        public Builder<T> message(String message) {
             this.message = message;
             return this;
         }
 
-        public Builder argumentArray(Object[] argumentArray) {
+        public Builder<T> argumentArray(Object[] argumentArray) {
             this.argumentArray = argumentArray;
             return this;
         }
 
-        public Builder formattedMessage(String formattedMessage) {
+        public Builder<T> formattedMessage(String formattedMessage) {
             this.formattedMessage = formattedMessage;
             return this;
         }
 
-        public Builder loggerName(String loggerName) {
+        public Builder<T> loggerName(String loggerName) {
             this.loggerName = loggerName;
             return this;
         }
 
-        public Builder throwable(Throwable throwable) {
+        public Builder<T> throwable(Throwable throwable) {
             this.throwable = throwable;
             return this;
         }
 
-        public Builder marker(Marker marker) {
+        public Builder<T> marker(Marker marker) {
             this.marker = marker;
             return this;
         }
 
-        public Builder timestamp(long timestamp) {
+        public Builder<T> timestamp(long timestamp) {
             this.timestamp = timestamp;
             return this;
         }
 
-        public LogEntry build() {
-            return new LogEntry(threadName, level, message, argumentArray, formattedMessage, loggerName, throwable, marker, timestamp);
+        public Builder<T> t(T t) {
+            this.t = t;
+            return this;
+        }
+
+        public LogEntry<T> build() {
+            return new LogEntry<>(threadName, level, message, argumentArray, formattedMessage, loggerName, throwable, marker, timestamp, t);
         }
 
         @Override
@@ -177,6 +194,7 @@ public final class LogEntry {
                     ", throwable=" + throwable +
                     ", marker=" + marker +
                     ", timestamp=" + timestamp +
+                    ", t=" + t +
                     '}';
         }
     }
