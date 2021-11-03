@@ -72,7 +72,7 @@ public abstract class AbstractAppender {
         stopInternally();
     }
 
-    public final void append(LogEntry logEntry) {
+    public final void append(LogEntry<?> logEntry) {
         // Run everything async, so the logging is not the bottleneck
         EXECUTOR_SERVICE.execute(() -> {
             if (logEntry.getMarker() != null && logEntry.getMarker().contains(SELF_IGNORE_MARKER)) {
@@ -101,7 +101,7 @@ public abstract class AbstractAppender {
         });
     }
 
-    protected abstract void doAppend(LogEntry logEntry);
+    protected abstract void doAppend(LogEntry<?> logEntry);
 
     protected abstract void startInternally();
 
