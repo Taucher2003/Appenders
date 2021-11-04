@@ -23,6 +23,7 @@ more are planned.
 | GithubCommentingIssue | Creates an issue for exceptions on a Github Repository, but tries to prevent duplicated issues |
 | GitlabIssue | Creates an issue for exceptions on a Gitlab Repository |
 | GitlabCommentingIssue | Creates an issue for exceptions on a Gitlab Repository, but tries to prevent duplicated issues |
+| Passthrough | Passes the log event to another appender |
 
 ## ⚡ Installation
 
@@ -424,6 +425,50 @@ Same applies to `level` and `ignoredMarker`. \
         [...] other existing appenders
         <appender-ref ref="gitlab-issues"/>
     </root>
+</configuration>
+```
+
+</details>
+
+<details>
+<summary>Logback Passthrough</summary>
+
+You need to create a new appender in your `logback.xml` configuration. \
+As class, you need to use `com.github.taucher2003.appenders.logback.log.LogbackPassthroughAppender`.
+
+The appender requires the setting `targetAppenderName` which specifies the name of an appender the events should get passed to. \
+The target appender needs to be attached to at least one logger to work.
+
+If no values have been set for `marker`, all log events will be handled by the logger. If at least one `marker` has been
+set, only log events with a marker named like one in the list will be handled and log events without or with other
+markers will be dropped by this logger. \
+Same applies to `level` and `ignoredMarker`. \
+`level` is used to filter for logging levels and `ignoredMarker` will set markers, which will be dropped.
+
+#### Example Console Configuration
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    [...] existing configuration
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        [...] existing configuration
+    </appender>
+    <appender name="console-passthrough" class="com.github.taucher2003.appenders.logback.log.LogbackPassthroughAppender">
+        <targetAppenderName>console</targetAppenderName>
+        <!-- This example will only pass log events with level WARN and ERROR to the console -->
+        <level>WARN</level>
+        <level>ERROR</level>
+    </appender>
+    <root level="INFO">
+        [...] other existing appenders
+        <appender-ref ref="console-passthrough"/>
+    </root>
+    <logger name="noop-registration-logger" level="ERROR">
+        <!-- The appender needs to be registered in at least one logger -->
+        <!-- otherwise Logback will forget it after configuration time -->
+        <appender-ref ref="console"/>
+    </logger>
 </configuration>
 ```
 
