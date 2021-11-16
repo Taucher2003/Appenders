@@ -72,7 +72,7 @@ public final class Utilities {
 
     private static void appendException(StringBuilder builder, StackTraceElement[] stackTraceElements, int maxCharacters) {
         for (int i = 0; i < stackTraceElements.length; i++) {
-            final String xMoreConstant = "\t... " + (stackTraceElements.length - i) + " more";
+            final String xMoreConstant = "\t... " + (stackTraceElements.length - i) + " more\n";
             String toAppend = "\tat " + stackTraceElements[i].toString() + "\n";
             if ((builder.length() + toAppend.length() + xMoreConstant.length()) >= maxCharacters) {
                 builder.append(xMoreConstant);
