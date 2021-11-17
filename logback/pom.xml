@@ -23,13 +23,16 @@
     <parent>
         <artifactId>appenders</artifactId>
         <groupId>com.github.taucher2003</groupId>
-        <version>1.0</version>
+        <version>${appenders.version}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.taucher2003.appenders</groupId>
     <artifactId>logback</artifactId>
     <version>${appenders.version}</version>
+
+    <name>Logback Appenders</name>
+    <description>Logback implementation of the Appenders Project. Delegates it's work to the core module.</description>
 
     <properties>
         <maven.compiler.source>${appenders.target}</maven.compiler.source>
@@ -41,12 +44,14 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.5</version>
+            <version>1.2.7</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.taucher2003.appenders</groupId>
             <artifactId>core</artifactId>
             <version>${appenders.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

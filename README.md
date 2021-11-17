@@ -21,10 +21,57 @@ more are planned.
 | DiscordBot | Sends log entries via Bot account to a Discord channel |
 | GithubIssue | Creates an issue for exceptions on a Github Repository |
 | GithubCommentingIssue | Creates an issue for exceptions on a Github Repository, but tries to prevent duplicated issues |
+| GitlabIssue | Creates an issue for exceptions on a Gitlab Repository |
+| GitlabCommentingIssue | Creates an issue for exceptions on a Gitlab Repository, but tries to prevent duplicated issues |
+| Passthrough | Passes the log event to another appender |
 
 ## ⚡ Installation
 
-This project is published with the Maven Central repository.
+The releases of the Appenders Project are published in the Central repository. \
+If you prefer pinning your version to a branch or commit instead of version numbers, these are deployed in GitLab.
+
+<details>
+<summary>Branch, Commit & Snapshot Versions</summary>
+
+If you want to use branch and commit versions, you need to add new repository to your build configuration. \
+This only provides information about the repository and the version information. For the actual dependency, please look below at the framework details.
+
+### Maven
+
+```xml
+<repository>
+    <id>appenders-gitlab</id>
+    <url>https://gitlab.com/api/v4/groups/12234336/-/packages/maven</url>
+</repository>
+```
+
+### Gradle
+
+```groovy
+repositories {
+    maven {
+        url "https://gitlab.com/api/v4/groups/12234336/-/packages/maven"
+    }
+}
+```
+
+### Snapshot Versions
+
+Snapshot versions get deployed on each push to `development`. \
+[Click here](https://gitlab.com/taucher2003-group/appenders/-/packages) to see a list of available versions.
+
+### Branch versions
+
+Branch versions are deployed every hour if the deployed version is out of date. \
+They have set the version to `<BRANCH_SLUG>-SNAPSHOT`. \
+[Click here](https://gitlab.com/taucher2003-group/appenders-branch/-/packages) to see a list of available versions.
+
+### Commit versions
+
+Commit versions have set the version to the full commit sha. \
+[Click here](https://gitlab.com/taucher2003-group/appenders-commit/-/packages) to see a list of available versions.
+
+</details>
 
 <details>
 <summary>Log4J</summary>
@@ -195,6 +242,54 @@ by this appender. The log level does not matter.
 </details>
 
 <details>
+<summary>Log4J Gitlab</summary>
+
+You need to create a new appender in your `log4j2.xml` configuration. \
+As plugin, you can choose between `GitlabIssue` and `GitlabCommentingIssue`.
+
+Both of them require the settings `baseUrl`, `repositoryId`, `accessToken` and `confidential`. \
+`baseUrl` is the base url of the GitLab instance. For gitlab.com users, this would be `https://gitlab.com`.
+`repositoryId` defines the id of the repository, which will be used to create the issues. The `accessToken` will be used
+for authorization. The issues will be created with the account, where the access token belongs to. If `confidential` is
+set to true, the issues will be created as confidential issue, so they are hidden from guest users.
+
+This appender will only log events which have a throwable attached. All log events without a throwable will be dropped
+by this appender. The log level does not matter.
+
+#### Example Configuration with both appenders
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="[...]" shutdownHook="[...]" packages="[...]">
+    <Appenders>
+        [...] existing appenders
+
+        <GitlabIssue name="GitlabIssue"
+                     baseUrl="https://gitlab.com"
+                     repositoryId="1"
+                     accessToken="[your access token]"
+                     confidential="true"/>
+
+        <GitlabCommentingIssue name="GitlabCommentingIssue"
+                               baseUrl="https://gitlab.com"
+                               repositoryId="1"
+                               accessToken="[your access token]"/>
+
+    </Appenders>
+    <Loggers>
+        <Root level="[...]">
+            [...] existing loggers
+
+            <AppenderRef ref="GitlabIssue"/>
+            <AppenderRef ref="GitlabCommentingIssue"/>
+        </Root>
+    </Loggers>
+</Configuration>
+```
+
+</details>
+
+<details>
 <summary>Logback Discord</summary>
 
 You need to create a new appender in your `logback.xml` configuration. \
@@ -287,6 +382,93 @@ Same applies to `level` and `ignoredMarker`. \
         [...] other existing appenders
         <appender-ref ref="github-issues"/>
     </root>
+</configuration>
+```
+
+</details>
+
+<details>
+<summary>Logback Gitlab</summary>
+
+You need to create a new appender in your `logback.xml` configuration. \
+As class, you can choose between `com.github.taucher2003.appenders.logback.gitlab.LogbackIssueAppender`
+and `com.github.taucher2003.appenders.logback.gitlab.LogbackCommentingIssueAppender`.
+
+Both of them require the settings `baseUrl`, `repositoryId`, `accessToken` and `confidential`. \
+`baseUrl` is the base url of the GitLab instance. For gitlab.com users, this would be `https://gitlab.com`.
+`repositoryId` defines the id of the repository, which will be used to create the issues. The `accessToken` will be used
+for authorization. The issues will be created with the account, where the access token belongs to. If `confidential` is
+set to true, the issues will be created as confidential issue, so they are hidden from guest users.
+
+This appender will only log events which have a throwable attached. All log events without a throwable will be dropped
+by this appender.
+
+If no values have been set for `marker`, all log events will be handled by the logger. If at least one `marker` has been
+set, only log events with a marker named like one in the list will be handled and log events without or with other
+markers will be dropped by this logger. \
+Same applies to `level` and `ignoredMarker`. \
+`level` is used to filter for logging levels and `ignoredMarker` will set markers, which will be dropped.
+
+#### Example Issue Configuration
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    [...] existing configuration
+    <appender name="gitlab-issues" class="com.github.taucher2003.appenders.logback.gitlab.LogbackIssueAppender">
+        <baseUrl>https://gitlab.com</baseUrl>
+        <repositoryId>1</repositoryId>
+        <accessToken>[your access token]</accessToken>
+        <confidential>true</confidential>
+    </appender>
+    <root level="INFO">
+        [...] other existing appenders
+        <appender-ref ref="gitlab-issues"/>
+    </root>
+</configuration>
+```
+
+</details>
+
+<details>
+<summary>Logback Passthrough</summary>
+
+You need to create a new appender in your `logback.xml` configuration. \
+As class, you need to use `com.github.taucher2003.appenders.logback.log.LogbackPassthroughAppender`.
+
+The appender requires the setting `targetAppenderName` which specifies the name of an appender the events should get passed to. \
+The target appender needs to be attached to at least one logger to work.
+
+If no values have been set for `marker`, all log events will be handled by the logger. If at least one `marker` has been
+set, only log events with a marker named like one in the list will be handled and log events without or with other
+markers will be dropped by this logger. \
+Same applies to `level` and `ignoredMarker`. \
+`level` is used to filter for logging levels and `ignoredMarker` will set markers, which will be dropped.
+
+#### Example Console Configuration
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    [...] existing configuration
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        [...] existing configuration
+    </appender>
+    <appender name="console-passthrough" class="com.github.taucher2003.appenders.logback.log.LogbackPassthroughAppender">
+        <targetAppenderName>console</targetAppenderName>
+        <!-- This example will only pass log events with level WARN and ERROR to the console -->
+        <level>WARN</level>
+        <level>ERROR</level>
+    </appender>
+    <root level="INFO">
+        [...] other existing appenders
+        <appender-ref ref="console-passthrough"/>
+    </root>
+    <logger name="noop-registration-logger" level="ERROR">
+        <!-- The appender needs to be registered in at least one logger -->
+        <!-- otherwise Logback will forget it after configuration time -->
+        <appender-ref ref="console"/>
+    </logger>
 </configuration>
 ```
 

@@ -32,9 +32,9 @@ import java.util.concurrent.TimeoutException;
 public abstract class AbstractWebAppender extends AbstractAppender {
 
     public static final MediaType APPLICATION_JSON = MediaType.parse("application/json");
+    protected static final OkHttpClient HTTP_CLIENT = new OkHttpClient();
 
     protected final WebRequester requester;
-    protected static final OkHttpClient HTTP_CLIENT = new OkHttpClient();
     protected String baseUrl;
 
     protected AbstractWebAppender(WebRequestExecutor executor) {

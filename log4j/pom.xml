@@ -23,13 +23,16 @@
     <parent>
         <artifactId>appenders</artifactId>
         <groupId>com.github.taucher2003</groupId>
-        <version>1.0</version>
+        <version>${appenders.version}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.taucher2003.appenders</groupId>
     <artifactId>log4j</artifactId>
     <version>${appenders.version}</version>
+
+    <name>Log4J Appenders</name>
+    <description>Log4J implementation of the Appenders Project. Delegates it's work to the core module.</description>
 
     <properties>
         <maven.compiler.source>${appenders.target}</maven.compiler.source>
@@ -42,11 +45,13 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.14.1</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.taucher2003.appenders</groupId>
             <artifactId>core</artifactId>
             <version>${appenders.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

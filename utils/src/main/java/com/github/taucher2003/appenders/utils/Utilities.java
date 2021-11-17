@@ -56,9 +56,23 @@ public final class Utilities {
         }
 
         StringBuilder builder = new StringBuilder(throwable + "\n");
-        StackTraceElement[] stackTraceElements = throwable.getStackTrace();
+
+        Throwable currentThrowable = throwable;
+        do {
+            StackTraceElement[] stackTraceElements = currentThrowable.getStackTrace();
+            if (currentThrowable != throwable) {
+                builder.append("Caused by: ").append(currentThrowable).append("\n");
+            }
+            appendException(builder, stackTraceElements, maxCharacters);
+        } while ((currentThrowable = currentThrowable.getCause()) != null);
+
+
+        return builder.toString();
+    }
+
+    private static void appendException(StringBuilder builder, StackTraceElement[] stackTraceElements, int maxCharacters) {
         for (int i = 0; i < stackTraceElements.length; i++) {
-            final String xMoreConstant = "\t... " + (stackTraceElements.length - i) + " more";
+            final String xMoreConstant = "\t... " + (stackTraceElements.length - i) + " more\n";
             String toAppend = "\tat " + stackTraceElements[i].toString() + "\n";
             if ((builder.length() + toAppend.length() + xMoreConstant.length()) >= maxCharacters) {
                 builder.append(xMoreConstant);
@@ -66,8 +80,6 @@ public final class Utilities {
             }
             builder.append(toAppend);
         }
-
-        return builder.toString();
     }
 
     /**

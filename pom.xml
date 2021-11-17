@@ -25,7 +25,7 @@
     <groupId>com.github.taucher2003</groupId>
     <artifactId>appenders</artifactId>
     <packaging>pom</packaging>
-    <version>1.0</version>
+    <version>${appenders.version}</version>
     <modules>
         <module>logback</module>
         <module>utils</module>
@@ -35,7 +35,9 @@
     </modules>
 
     <properties>
-        <appenders.version>1.0</appenders.version>
+        <appenders.version>${appenders.rawVersion}${appenders.releaseType}</appenders.version>
+        <appenders.releaseType>-SNAPSHOT</appenders.releaseType>
+        <appenders.rawVersion>1.1</appenders.rawVersion>
         <appenders.target>8</appenders.target>
         <appenders.encoding>UTF-8</appenders.encoding>
         <maven.compiler.source>${appenders.target}</maven.compiler.source>
@@ -43,8 +45,8 @@
         <project.build.sourceEncoding>${appenders.encoding}</project.build.sourceEncoding>
     </properties>
 
-    <name>Various Logging Appenders</name>
-    <description>Various Logging Appenders which can append to e.g. discord webhooks</description>
+    <name>Appenders Project Parent</name>
+    <description>Parent of the Appenders Project. Defines shared dependencies and build process.</description>
     <url>https://github.com/Taucher2003/Appenders</url>
     <licenses>
         <license>
@@ -68,8 +70,8 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>gitlab</id>
+            <url>https://gitlab.com/api/v4/projects/29199582/packages/maven</url>
         </snapshotRepository>
         <repository>
             <id>ossrh</id>
@@ -82,27 +84,55 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.32</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>club.minnced</groupId>
             <artifactId>discord-webhooks</artifactId>
-            <version>0.5.8</version>
+            <version>0.7.2</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>4.9.1</version>
+            <version>4.9.2</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.8.0-RC1</version>
+            <version>5.8.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.2.7</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -116,7 +146,7 @@
                     <dependency>
                         <groupId>org.junit.jupiter</groupId>
                         <artifactId>junit-jupiter-engine</artifactId>
-                        <version>5.8.0-RC1</version>
+                        <version>5.8.1</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -171,7 +201,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.3.1</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>

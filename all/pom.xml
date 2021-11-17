@@ -23,13 +23,16 @@
     <parent>
         <artifactId>appenders</artifactId>
         <groupId>com.github.taucher2003</groupId>
-        <version>1.0</version>
+        <version>${appenders.version}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.taucher2003.appenders</groupId>
     <artifactId>all</artifactId>
     <version>${appenders.version}</version>
+
+    <name>All Appenders Implementations</name>
+    <description>Convenience module to load all implementations of the Appenders Project.</description>
 
     <properties>
         <maven.compiler.source>${appenders.target}</maven.compiler.source>
@@ -42,11 +45,13 @@
             <groupId>com.github.taucher2003.appenders</groupId>
             <artifactId>log4j</artifactId>
             <version>${appenders.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.taucher2003.appenders</groupId>
             <artifactId>logback</artifactId>
             <version>${appenders.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

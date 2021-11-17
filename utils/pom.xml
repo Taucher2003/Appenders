@@ -23,13 +23,16 @@
     <parent>
         <artifactId>appenders</artifactId>
         <groupId>com.github.taucher2003</groupId>
-        <version>1.0</version>
+        <version>${appenders.version}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.taucher2003.appenders</groupId>
     <artifactId>utils</artifactId>
     <version>${appenders.version}</version>
+
+    <name>Appenders Utilities</name>
+    <description>Utilities for the Appenders Project. Mostly used by the core module.</description>
 
     <properties>
         <maven.compiler.source>${appenders.target}</maven.compiler.source>

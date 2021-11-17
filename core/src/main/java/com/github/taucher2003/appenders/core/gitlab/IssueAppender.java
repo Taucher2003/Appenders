@@ -16,7 +16,7 @@
  *
  */
 
-package com.github.taucher2003.appenders.core.github;
+package com.github.taucher2003.appenders.core.gitlab;
 
 import com.github.taucher2003.appenders.core.AbstractWebAppender;
 import com.github.taucher2003.appenders.core.LogEntry;
@@ -28,9 +28,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IssueAppender extends AbstractGithubAppender {
+public class IssueAppender extends AbstractGitlabAppender {
+
+    // issue create has an actual limit of 1_048_576
+    private static final int DESCRIPTION_CHARACTER_LIMIT = 1_000_000;
 
     protected List<String> labels = new ArrayList<>();
+    protected boolean confidential;
 
     @Override
     protected void startInternally() {
@@ -59,19 +63,22 @@ public class IssueAppender extends AbstractGithubAppender {
     private RequestBody createIssueBody(LogEntry logEntry) {
         JSONObject object = new JSONObject()
                 .put("title", logEntry.getThrowable().toString())
-                .put("body", createBody(logEntry))
-                .put("labels", labels);
+                .put("description", createDescription(logEntry))
+                .put("labels", labels)
+                .put("confidential", confidential);
         return RequestBody.create(AbstractWebAppender.APPLICATION_JSON, object.toString());
     }
 
-    protected String createBody(LogEntry logEntry) {
-        return "An exception has been logged with "
+    protected String createDescription(LogEntry logEntry) {
+        String base = "An exception has been logged with "
                 + logEntry.getLevel().getLevelName()
                 + " level.\n\n"
                 + logEntry.getFormattedMessage()
                 + "\n\n```\n"
-                + Utilities.getExceptionStacktrace(logEntry.getThrowable())
+                + "%s"
                 + "```";
+        String exception = Utilities.getExceptionStacktrace(logEntry.getThrowable(), DESCRIPTION_CHARACTER_LIMIT - base.length());
+        return String.format(base, exception);
     }
 
     // ---- Setters
@@ -79,5 +86,9 @@ public class IssueAppender extends AbstractGithubAppender {
     // actually adds a label
     public void setLabel(String label) {
         labels.add(label);
+    }
+
+    public void setConfidential(boolean confidential) {
+        this.confidential = confidential;
     }
 }
