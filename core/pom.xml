@@ -45,11 +45,13 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20210307</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.taucher2003.appenders</groupId>
             <artifactId>utils</artifactId>
             <version>${appenders.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
