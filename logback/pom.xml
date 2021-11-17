@@ -45,11 +45,13 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.7</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.taucher2003.appenders</groupId>
             <artifactId>core</artifactId>
             <version>${appenders.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
