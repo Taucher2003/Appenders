@@ -89,7 +89,7 @@
         <dependency>
             <groupId>club.minnced</groupId>
             <artifactId>discord-webhooks</artifactId>
-            <version>0.7.3</version>
+            <version>0.7.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
