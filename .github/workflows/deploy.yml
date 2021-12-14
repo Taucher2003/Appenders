@@ -19,8 +19,6 @@ jobs:
           server-password: OSSRH_PASSWORD
           gpg-private-key: ${{ secrets.GPG_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
-      - name: Change version
-        run: sed -i 's/<appenders.version>${appenders.rawVersion}${appenders.releaseType}<\/appenders.version>/<appenders.version>${appenders.rawVersion}<\/appenders.version>/g' pom.xml
       - name: Deploy with Maven
         run: mvn --batch-mode --update-snapshots -Dappenders.releaseType= deploy
         env:
@@ -63,7 +61,5 @@ jobs:
         run: sed -i 's/https:\/\/oss.sonatype.org\/service\/local\/staging\/deploy\/maven2\//https:\/\/gitlab.com\/api\/v4\/projects\/29200088\/packages\/maven/g' pom.xml
       - name: Change distribution name
         run: sed -i 's/ossrh/gitlab/g' pom.xml
-      - name: Change version
-        run: sed -i 's/<appenders.version>${appenders.rawVersion}${appenders.releaseType}<\/appenders.version>/<appenders.version>${{ github.sha }}<\/appenders.version>/g' pom.xml
       - name: Deploy with Maven
         run: mvn --batch-mode --update-snapshots -s gitlab_deployment.xml -Dgpg.skip -Dappenders.version=${{ github.sha }} -Dappenders.deploy.gitlabToken=${{ secrets.GITLAB_TOKEN }} -Dappenders.deploy.gitlabUsername=Deploy-Token deploy
