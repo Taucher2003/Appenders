@@ -20,6 +20,8 @@ package com.github.taucher2003.appenders.utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Utility class which provides some general helper methods used by the appenders
@@ -101,6 +103,10 @@ public final class Utilities {
             return message;
         }
 
+        if(max <= 3) {
+            return Stream.generate(() -> ".").limit(max).collect(Collectors.joining());
+        }
+
         int length = message.length();
         int firstSubEnd = (max / 2);
         if (max % 2 == 0) {
@@ -127,6 +133,10 @@ public final class Utilities {
     public static String shortenWithEndCut(String message, int max) {
         if (message.length() <= max) {
             return message;
+        }
+
+        if(max <= 3) {
+            return Stream.generate(() -> ".").limit(max).collect(Collectors.joining());
         }
 
         return message.substring(0, max - 3) + "...";
