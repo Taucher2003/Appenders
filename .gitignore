@@ -182,6 +182,7 @@ pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
 pom.xml.next
+.flattened-pom.xml
 release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
@@ -190,3 +191,5 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,intellij+all,jetbrains+all
+
+!.idea/runConfigurations/
