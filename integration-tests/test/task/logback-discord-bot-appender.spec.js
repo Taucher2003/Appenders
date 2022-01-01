@@ -31,6 +31,12 @@ describe("Bot Appender for Logback (no additional configuration)", () => {
         expect(mock.mock.calls[0][0]).toEqual("123");
     }, 60000);
 
+    it("Calls Rest API with correct Authorization header", async () => {
+        const mock = jest.fn()
+        await execute("DiscordBot", mock, framework);
+        expect(mock.mock.calls[0][2].authorization).toEqual("Bot ABC");
+    }, 60000);
+
     it("Calls Rest API with valid body", async () => {
         const mock = jest.fn()
         await execute("DiscordBot", mock, framework);

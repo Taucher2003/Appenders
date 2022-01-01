@@ -35,6 +35,11 @@ public final class LogMessageSender {
         LOGGER.info("Test", new Throwable("Exception"));
         LOGGER.warn("Test", new Throwable("Exception"));
         LOGGER.error("Test", new Throwable("Exception"));
-        System.exit(0);
+        LOGGER.info("Other Test");
+        LOGGER.warn("Other Test");
+        LOGGER.error("Other Test");
+        LOGGER.info("Third Other Test");
+        LOGGER.warn("Third Other Test");
+        LOGGER.error("Third Other Test");
     }
 }
