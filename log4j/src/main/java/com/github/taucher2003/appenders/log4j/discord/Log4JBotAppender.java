@@ -40,7 +40,6 @@ public final class Log4JBotAppender extends AbstractLog4JDiscordAppender<BotAppe
         super(new BotAppender(), name, filter, null, ignoreExceptions);
         delegate.setToken(token);
         delegate.setChannelId(channelId);
-        delegate.setApiHost(apiHost);
         if(!"".equalsIgnoreCase(apiHost)) {
             delegate.setApiHost(apiHost);
         }

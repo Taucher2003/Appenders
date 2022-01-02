@@ -16,34 +16,33 @@
  *
  */
 
-const {execute} = require("./runner");
+const {execute, logback} = require("./runner");
 describe("Bot Appender for Logback (no additional configuration)", () => {
-    const framework = {framework: "logback", configName: "logback"};
     it("Calls Rest API 2 times", async () => {
         const mock = jest.fn()
-        await execute("DiscordBot", mock, framework);
+        await execute("DiscordBot", mock, logback);
         expect(mock).toBeCalledTimes(2);
     }, 60000);
 
     it("Rest API path contains configured channel id", async () => {
         const mock = jest.fn()
-        await execute("DiscordBot", mock, framework);
-        expect(mock.mock.calls[0][0]).toEqual("123");
+        await execute("DiscordBot", mock, logback);
+        expect(mock.mock.calls[0][0].params.id).toEqual("123");
     }, 60000);
 
     it("Calls Rest API with correct Authorization header", async () => {
         const mock = jest.fn()
-        await execute("DiscordBot", mock, framework);
-        expect(mock.mock.calls[0][2].authorization).toEqual("Bot ABC");
+        await execute("DiscordBot", mock, logback);
+        expect(mock.mock.calls[0][0].headers.authorization).toEqual("Bot ABC");
     }, 60000);
 
     it("Calls Rest API with valid body", async () => {
         const mock = jest.fn()
-        await execute("DiscordBot", mock, framework);
+        await execute("DiscordBot", mock, logback);
 
         // we use the second call as there are less embeds
         const timestampRegex = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/;
-        expect(mock.mock.calls[1][1]).toEqual({
+        expect(mock.mock.calls[1][0].body).toEqual({
             allowed_mentions: {parse: ["users", "roles", "everyone"]},
             embeds: [{
                 color: 16762880,

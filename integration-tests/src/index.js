@@ -21,10 +21,15 @@ module.exports = (test, jestFn) => {
     const app = express();
     app.use(express.json())
 
-    switch (test) {
+    switch (test.split("-")[0]) {
         case "DiscordBot":
-            const handler = require("./routes/DiscordBot");
-            app.use(handler(jestFn));
+            app.use(require("./routes/DiscordBot")(jestFn));
+            break;
+        case "GitHub":
+            app.use(require("./routes/GitHub")(jestFn));
+            break;
+        case "GitLab":
+            app.use(require("./routes/GitLab")(jestFn));
             break;
         default:
             throw new Error("Unsupported test");

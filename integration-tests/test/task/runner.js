@@ -58,3 +58,6 @@ function copyConfig(framework, configName, test) {
 function removeConfig(framework, configName) {
     fs.rmSync(`${framework}-it/target/${configName}.xml`);
 }
+
+module.exports.logback = {framework: "logback", configName: "logback"};
+module.exports.log4j = {framework: "log4j", configName: "log4j2"};

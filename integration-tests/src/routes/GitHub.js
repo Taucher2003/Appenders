@@ -18,10 +18,22 @@
 
 module.exports = (jestFn) => {
     const router = require('express').Router();
-    router.post('/channels/:id/messages', (req, res) => {
-        jestFn(req);
+    router.post('/repos/:repoOwner/:repoName/issues', (req, res) => {
+        jestFn(req, "Created Issue");
         res.status(200).end();
     });
-    router.get('/gateway/bot', (req, res) => res.status(200).end())
+    router.get('/repos/:repoOwner/:repoName/issues', (req, res) => {
+        jestFn(req, "Fetched Issues");
+        res.status(200).send([
+            {
+                title: "java.lang.Throwable: Exception",
+                number: 2
+            }
+        ])
+    });
+    router.post('/repos/:repoOwner/:repoName/issues/:issueId/comments', (req, res) => {
+        jestFn(req, "Commented on Issue");
+        res.status(200).end();
+    })
     return router;
 }
