@@ -5,6 +5,7 @@ on:
     workflows:
       - "CI"
       - "CI for merged result"
+      - "ci"
     types:
       - completed
 
