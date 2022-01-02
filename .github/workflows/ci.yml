@@ -33,7 +33,7 @@ jobs:
         with:
           name: Integration Test Results
           path: |
-            */target/surefire-reports/*.xml
+            integration-tests/junit.xml
   event_file:
     name: "Event File"
     runs-on: ubuntu-latest
