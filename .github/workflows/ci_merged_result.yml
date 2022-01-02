@@ -20,3 +20,12 @@ jobs:
       - name: Run Integration Tests
         run: yarn test:ci
         working-directory: ./integration-tests
+  event_file:
+    name: "Event File"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: Event File
+          path: ${{ github.event_path }}
