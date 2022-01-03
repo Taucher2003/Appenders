@@ -19,7 +19,7 @@
 
 <Configuration status="WARN" shutdownHook="disable" packages="com.github.taucher2003.appenders">
     <Appenders>
-        <GitlabCommentingIssue name="GitlabCommentingIssue"
+        <GitlabIssue name="GitlabIssue"
                                baseUrl="http://localhost:6000"
                                repositoryId="1"
                                accessToken="ACCESS_TOKEN"
@@ -28,7 +28,7 @@
     </Appenders>
     <Loggers>
         <Root level="INFO">
-            <AppenderRef ref="GitlabCommentingIssue"/>
+            <AppenderRef ref="GitlabIssue"/>
         </Root>
     </Loggers>
 </Configuration>
