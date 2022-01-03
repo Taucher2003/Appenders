@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2021 Niklas van Schrick and the contributors of the Appenders Project
+ *  Copyright 2022 Niklas van Schrick and the contributors of the Appenders Project
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -39,6 +39,10 @@ public class LogbackBotAppender extends AbstractLogbackDiscordAppender<BotAppend
     }
 
     // ---- Setters
+
+    public void setApiHost(String apiHost) {
+        delegate.setApiHost(apiHost);
+    }
 
     public void setToken(String token) {
         delegate.setToken(token);

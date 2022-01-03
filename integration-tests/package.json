@@ -1,0 +1,27 @@
+{
+  "name": "appenders-integration-tests",
+  "version": "1.0.0",
+  "description": "Integration Tests for the Appenders Project",
+  "main": "src/index.js",
+  "author": "Taucher2003",
+  "license": "Apache 2.0",
+  "private": true,
+  "scripts": {
+    "test:compiled": "jest --maxWorkers=1 --ci --reporters=default --reporters=jest-junit --watchAll=false",
+    "test:ci": "yarn test:compiled --globalSetup=./test/task/setup.js",
+    "test:clean": "yarn test:compiled --globalSetup=./test/task/setup-clean.js"
+  },
+  "devDependencies": {
+    "express": "^4.17.2",
+    "jest": "^27.4.5",
+    "jest-junit": "^13.0.0"
+  },
+  "jest": {
+    "testMatch": [
+      "**/*.spec.js"
+    ]
+  },
+  "jest-junit": {
+    "ancestorSeparator": " › "
+  }
+}

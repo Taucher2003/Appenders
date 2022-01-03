@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2021 Niklas van Schrick and the contributors of the Appenders Project
+ *  Copyright 2022 Niklas van Schrick and the contributors of the Appenders Project
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ public class BotAppender extends AbstractDiscordAppender {
     private final OkHttpClient httpClient = new OkHttpClient.Builder().build();
     private final WebRequester discordRequester;
 
+    private String apiHost = "https://discord.com/api";
     private String token;
     private long channelId;
 
@@ -50,7 +51,7 @@ public class BotAppender extends AbstractDiscordAppender {
 
     private void doSend(Collection<WebhookEmbed> embeds) {
         WebhookMessage webhookMessage = WebhookMessage.embeds(embeds);
-        Request request = buildRequest("https://discord.com/api/channels/" + channelId + "/messages").post(webhookMessage.getBody()).build();
+        Request request = buildRequest(apiHost + "/channels/" + channelId + "/messages").post(webhookMessage.getBody()).build();
         try {
             discordRequester.request(request).get(10, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException exception) {
@@ -71,7 +72,7 @@ public class BotAppender extends AbstractDiscordAppender {
             throw new IllegalArgumentException("No channel set");
         }
 
-        Request request = buildRequest("https://discord.com/api/gateway/bot").get().build();
+        Request request = buildRequest(apiHost + "/gateway/bot").get().build();
         Call call = httpClient.newCall(request);
         try (Response response = call.execute()) {
             if (response.isSuccessful() || response.code() == 429) {
@@ -100,6 +101,12 @@ public class BotAppender extends AbstractDiscordAppender {
     }
 
     // ---- Setters
+
+
+    // mostly internal use
+    public void setApiHost(String apiHost) {
+        this.apiHost = apiHost;
+    }
 
     public void setToken(String token) {
         this.token = token;

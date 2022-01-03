@@ -7,3 +7,10 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - "topic: dependencies"
+  - package-ecosystem: npm
+    directory: integration-tests/
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+    labels:
+      - "topic: dependencies"

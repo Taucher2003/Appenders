@@ -1,0 +1,45 @@
+name: CI
+
+on: [ push ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Build & Unit Test with Maven
+        run: mvn --batch-mode --update-snapshots package
+      - name: Upload Unit Test Results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: Unit Test Results
+          path: |
+            */target/surefire-reports/*.xml
+      - name: Install Integration Test Dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: ./integration-tests
+      - name: Run Integration Tests
+        run: yarn test:ci
+        working-directory: ./integration-tests
+      - name: Upload Integration Test Results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: Integration Test Results
+          path: |
+            integration-tests/junit.xml
+  event_file:
+    name: "Event File"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: Event File
+          path: ${{ github.event_path }}
