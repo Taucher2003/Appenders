@@ -19,7 +19,6 @@
 package com.github.taucher2003.appenders.log4j.github;
 
 import com.github.taucher2003.appenders.core.github.IssueAppender;
-import com.github.taucher2003.appenders.log4j.discord.Log4JBotAppender;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.Core;
 import org.apache.logging.log4j.core.Filter;
@@ -27,13 +26,9 @@ import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Plugin(name = "GithubIssue", category = Core.CATEGORY_NAME, elementType = Appender.ELEMENT_TYPE)
 public final class Log4JIssueAppender extends AbstractLog4JGithubAppender<IssueAppender> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Log4JBotAppender.class);
 
     // legacy support for log4j version before 2.11.2
     @Deprecated
