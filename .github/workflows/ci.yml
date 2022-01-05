@@ -13,7 +13,9 @@ jobs:
         with:
           java-version: 11
       - name: Build & Unit Test with Maven
-        run: mvn --batch-mode --update-snapshots package
+        run: |
+          source .github/workflows/utils.sh
+          run_timed_command mvn --batch-mode --update-snapshots package
       - name: Upload Unit Test Results
         if: always()
         uses: actions/upload-artifact@v2
@@ -22,10 +24,14 @@ jobs:
           path: |
             */target/surefire-reports/*.xml
       - name: Install Integration Test Dependencies
-        run: yarn install --frozen-lockfile
+        run: |
+          source ../.github/workflows/utils.sh
+          run_timed_command yarn install --frozen-lockfile
         working-directory: ./integration-tests
       - name: Run Integration Tests
-        run: yarn test:ci
+        run: |
+          source ../.github/workflows/utils.sh
+          retry yarn test:ci
         working-directory: ./integration-tests
       - name: Upload Integration Test Results
         if: always()
