@@ -87,11 +87,11 @@ public abstract class WebRequestExecutor {
         long retryAfter = bucket.getRetryAfter();
         long resetIn = bucket.getResetAt() - System.currentTimeMillis();
         if (retryAfter > 0 || resetIn > 0) {
-            LOGGER.debug("Delaying queue execution for {}ms ({} in queue)", Math.max(retryAfter, resetIn), requests.size());
+            LOGGER.debug(selfIgnoringMarker, "Delaying queue execution for {}ms ({} in queue)", Math.max(retryAfter, resetIn), requests.size());
             try {
                 Thread.sleep(Math.max(retryAfter, resetIn));
             } catch (InterruptedException e) {
-                LOGGER.warn("Failed to delay queue execution", e);
+                LOGGER.warn(selfIgnoringMarker, "Failed to delay queue execution", e);
             }
         }
         executorService.execute(this::executeQueue);

@@ -35,7 +35,7 @@ module.exports.execute = (test, jestFn, {framework, configName}) => {
     return startMockServer(test, jestFn).then((server) => {
         const childProcess = spawn("java", [`com.github.taucher2003.appenders.it.${framework}.LogMessageSender`], {
             cwd: `${framework}-it/target`,
-            timeout: 10000
+            timeout: 50000
         });
 
         childProcess.stdout.on('data', data => console.info(`${data}`));
