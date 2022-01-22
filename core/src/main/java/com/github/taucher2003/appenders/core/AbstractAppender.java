@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2021 Niklas van Schrick and the contributors of the Appenders Project
+ *  Copyright 2022 Niklas van Schrick and the contributors of the Appenders Project
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,15 +25,13 @@ import org.slf4j.MarkerFactory;
 
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractAppender {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractAppender.class);
-    protected static final ScheduledExecutorService EXECUTOR_SERVICE = Executors.newScheduledThreadPool(1);
+    protected static final ForkJoinPool FORK_JOIN_POOL = ForkJoinPool.commonPool();
     protected static final Collection<AbstractAppender> INSTANCES = new CopyOnWriteArrayList<>();
     protected static final Marker SELF_IGNORE_MARKER = MarkerFactory.getMarker(AbstractAppender.class.getCanonicalName());
 
@@ -43,7 +41,8 @@ public abstract class AbstractAppender {
 
     private static void shutdown() {
         INSTANCES.forEach(AbstractAppender::stop);
-        EXECUTOR_SERVICE.shutdown();
+        //noinspection ResultOfMethodCallIgnored // we only need the side effect
+        FORK_JOIN_POOL.awaitQuiescence(1, TimeUnit.NANOSECONDS);
     }
 
     private int flushInterval = 5;
@@ -53,52 +52,60 @@ public abstract class AbstractAppender {
     private final Collection<String> ignoredMarkerNames = new CopyOnWriteArrayList<>();
     private final Collection<LogLevel> levels = new CopyOnWriteArrayList<>();
 
-    private ScheduledFuture<?> sendFuture;
+    private boolean isStarted;
 
     protected AbstractAppender() {
         INSTANCES.add(this);
     }
 
     public void start() {
+        isStarted = true;
         startInternally();
-        sendFuture = EXECUTOR_SERVICE.scheduleAtFixedRate(this::flush, flushInterval, flushInterval, flushUnit);
+        FORK_JOIN_POOL.execute(this::processFlush);
+    }
+
+    private void processFlush() {
+        try {
+            Thread.sleep(flushUnit.toMillis(flushInterval));
+        } catch (InterruptedException e) {
+            LOGGER.warn(SELF_IGNORE_MARKER, "Failed to wait for next flush", e);
+        }
+        flush();
+        if(isStarted) {
+            FORK_JOIN_POOL.execute(this::processFlush);
+        }
     }
 
     public void stop() {
-        if (sendFuture != null) {
-            sendFuture.cancel(false);
-        }
         flush();
         stopInternally();
+        isStarted = false;
     }
 
     public final void append(LogEntry<?> logEntry) {
-        // Run everything async, so the logging is not the bottleneck
-        EXECUTOR_SERVICE.execute(() -> {
-            if (logEntry.getMarker() != null && logEntry.getMarker().contains(SELF_IGNORE_MARKER)) {
-                return;
-            }
-            if (logEntry.getMarker() != null) {
-                if (!markerNames.isEmpty()
-                        && !markerNames.contains(logEntry.getMarker().getName())) {
-                    return;
-                }
-
-                if (ignoredMarkerNames.contains(logEntry.getMarker().getName())) {
-                    return;
-                }
-            }
-            if (logEntry.getMarker() == null
-                    && !markerNames.isEmpty()) {
-                return;
-            }
-            if (!levels.isEmpty()
-                    && !levels.contains(logEntry.getLevel())) {
+        if (logEntry.getMarker() != null && logEntry.getMarker().contains(SELF_IGNORE_MARKER)) {
+            return;
+        }
+        if (logEntry.getMarker() != null) {
+            if (!markerNames.isEmpty()
+                    && !markerNames.contains(logEntry.getMarker().getName())) {
                 return;
             }
 
-            doAppend(logEntry);
-        });
+            if (ignoredMarkerNames.contains(logEntry.getMarker().getName())) {
+                return;
+            }
+        }
+        if (logEntry.getMarker() == null
+                && !markerNames.isEmpty()) {
+            return;
+        }
+        if (!levels.isEmpty()
+                && !levels.contains(logEntry.getLevel())) {
+            return;
+        }
+
+        doAppend(logEntry);
     }
 
     protected abstract void doAppend(LogEntry<?> logEntry);

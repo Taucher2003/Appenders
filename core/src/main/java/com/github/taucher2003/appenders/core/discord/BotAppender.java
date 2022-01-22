@@ -97,7 +97,7 @@ public class BotAppender extends AbstractDiscordAppender {
 
     @Override
     protected void stopInternally() {
-        discordRequester.shutdown();
+        // no-op
     }
 
     // ---- Setters

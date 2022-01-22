@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2021 Niklas van Schrick and the contributors of the Appenders Project
+ *  Copyright 2022 Niklas van Schrick and the contributors of the Appenders Project
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -29,12 +29,9 @@ import org.slf4j.Marker;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Abstract base class for web request execution
@@ -43,14 +40,13 @@ public abstract class WebRequestExecutor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebRequestExecutor.class);
 
-    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    private final ForkJoinPool executorService = ForkJoinPool.commonPool();
     private final Marker selfIgnoringMarker;
     private final Bucket bucket;
     private final OkHttpClient httpClient;
 
     private final BlockingQueue<DataPair<Request, CompletableFuture<String>>> requests = new LinkedBlockingQueue<>();
-    private final AtomicReference<ScheduledFuture<?>> currentQueueExecution = new AtomicReference<>();
-    private boolean shuttingDown;
+    private final AtomicBoolean currentQueueExecution = new AtomicBoolean();
 
     /**
      * Creates a new instance of a web request executor
@@ -80,19 +76,25 @@ public abstract class WebRequestExecutor {
      */
     boolean addToQueue(DataPair<Request, CompletableFuture<String>> request) {
         boolean added = requests.add(request);
-        if (added && currentQueueExecution.get() == null) {
-            delayQueue();
+        if (added && !currentQueueExecution.get()) {
+            executorService.execute(this::executeQueue);
         }
         return added;
     }
 
     private void delayQueue() {
+        currentQueueExecution.set(true);
         long retryAfter = bucket.getRetryAfter();
         long resetIn = bucket.getResetAt() - System.currentTimeMillis();
         if (retryAfter > 0 || resetIn > 0) {
-            LOGGER.debug(selfIgnoringMarker, "Delaying queue execution for {}", Math.max(retryAfter, resetIn));
+            LOGGER.debug("Delaying queue execution for {}ms ({} in queue)", Math.max(retryAfter, resetIn), requests.size());
+            try {
+                Thread.sleep(Math.max(retryAfter, resetIn));
+            } catch (InterruptedException e) {
+                LOGGER.warn("Failed to delay queue execution", e);
+            }
         }
-        currentQueueExecution.set(executorService.schedule(this::executeQueue, Math.max(retryAfter, resetIn), TimeUnit.MILLISECONDS));
+        executorService.execute(this::executeQueue);
     }
 
     private synchronized void executeQueue() {
@@ -108,10 +110,7 @@ public abstract class WebRequestExecutor {
             }
             requests.poll();
         }
-        currentQueueExecution.set(null);
-        if (shuttingDown && requests.isEmpty()) {
-            executorService.shutdown();
-        }
+        currentQueueExecution.set(false);
     }
 
     private boolean executePair(DataPair<Request, ? extends CompletableFuture<String>> request) {
@@ -143,13 +142,5 @@ public abstract class WebRequestExecutor {
             request.getSecond().completeExceptionally(e);
         }
         return true;
-    }
-
-    /**
-     * Marks this executor for shutdown
-     * The shutdown takes part after all requests have been processed
-     */
-    public void shutdown() {
-        shuttingDown = true;
     }
 }

@@ -45,7 +45,7 @@ module.exports.execute = (test, jestFn, {framework, configName}) => {
             childProcess.on('close', () => {
                 server.close();
                 removeConfig(framework, configName);
-                setTimeout(resolve, 5000);
+                setTimeout(resolve, 5);
             })
         })
     })
