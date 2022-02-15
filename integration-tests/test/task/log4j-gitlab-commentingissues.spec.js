@@ -43,28 +43,27 @@ describe("GitLab Commenting Issue Appender for Log4J", () => {
     it("Fetches Issues before creating issue", async () => {
         const mock = jest.fn();
         await execute("GitLab-CommentingIssue", mock, log4j);
-        expect(mock.mock.calls[0][1]).toEqual("Fetched Issues");
+        expect(mock.mock.calls.filter(s => s[1] === "Fetched Issues").length).toEqual(3);
     }, 60000);
 
     it("Creates comments for existing issue", async () => {
         const mock = jest.fn();
         await execute("GitLab-CommentingIssue", mock, log4j);
-        expect(mock.mock.calls[1][1]).toEqual("Commented on Issue");
-        expect(mock.mock.calls[3][1]).toEqual("Commented on Issue");
+        expect(mock.mock.calls.filter(s => s[1] === "Commented on Issue").length).toEqual(2);
     }, 60000);
 
     it("Creates issue for non existing issue", async () => {
         const mock = jest.fn();
         await execute("GitLab-CommentingIssue", mock, log4j);
-        expect(mock.mock.calls[5][1]).toEqual("Created Issue");
+        expect(mock.mock.calls.filter(s => s[1] === "Created Issue").length).toEqual(1);
     }, 60000);
 
     it("Calls Rest API with valid body", async () => {
         const mock = jest.fn();
         await execute("GitLab-CommentingIssue", mock, log4j);
-        expect(mock.mock.calls[1][0].body).toEqual({
+        expect(mock.mock.calls.find(c => c[1] === "Commented on Issue")[0].body).toEqual({
             body: expect.any(String),
             confidential: false
-        })
+        });
     }, 60000);
 })
