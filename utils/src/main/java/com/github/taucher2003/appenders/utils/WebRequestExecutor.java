@@ -98,6 +98,7 @@ public abstract class WebRequestExecutor {
     }
 
     private synchronized void executeQueue() {
+        currentQueueExecution.set(true);
         while (!requests.isEmpty()) {
             if (bucket.isRatelimit()) {
                 delayQueue();
