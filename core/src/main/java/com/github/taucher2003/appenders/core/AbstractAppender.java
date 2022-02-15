@@ -42,7 +42,7 @@ public abstract class AbstractAppender {
     private static void shutdown() {
         INSTANCES.forEach(AbstractAppender::stop);
         //noinspection ResultOfMethodCallIgnored // we only need the side effect
-        FORK_JOIN_POOL.awaitQuiescence(1, TimeUnit.SECONDS);
+        FORK_JOIN_POOL.awaitQuiescence(10, TimeUnit.SECONDS);
     }
 
     private int flushInterval = 5;
