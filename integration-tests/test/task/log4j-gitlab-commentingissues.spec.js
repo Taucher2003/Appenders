@@ -49,6 +49,7 @@ describe("GitLab Commenting Issue Appender for Log4J", () => {
     it("Creates comments for existing issue", async () => {
         const mock = jest.fn();
         await execute("GitLab-CommentingIssue", mock, log4j);
+        console.log(mock.mock.calls)
         expect(mock.mock.calls.filter(s => s[1] === "Commented on Issue").length).toEqual(2);
     }, 60000);
 
