@@ -12,7 +12,7 @@
     "test:clean": "yarn test:compiled --globalSetup=./test/task/setup-clean.js"
   },
   "devDependencies": {
-    "express": "^4.17.2",
+    "express": "^4.17.3",
     "jest": "^27.5.1",
     "jest-junit": "^13.0.0"
   },
