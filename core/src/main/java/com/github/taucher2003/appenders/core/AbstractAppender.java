@@ -43,6 +43,8 @@ public abstract class AbstractAppender {
         INSTANCES.forEach(AbstractAppender::stop);
         //noinspection ResultOfMethodCallIgnored // we only need the side effect
         FORK_JOIN_POOL.awaitQuiescence(1, TimeUnit.NANOSECONDS);
+        while(FORK_JOIN_POOL.getRunningThreadCount() > 0 || FORK_JOIN_POOL.getQueuedSubmissionCount() > 0) {
+        }
     }
 
     private int flushInterval = 5;
