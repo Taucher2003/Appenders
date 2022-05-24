@@ -60,7 +60,7 @@ public final class Log4JBotAppender extends AbstractLog4JDiscordAppender<BotAppe
             @PluginAttribute("ignoreExceptions") boolean ignoreExceptions,
             @PluginAttribute(value = "token", sensitive = true) String token,
             @PluginAttribute(value = "channelId") String channelId,
-            @PluginAttribute(value = "apiHost") String apiHost,
+            @PluginAttribute(value = "apiHost", defaultString = "https://discord.com/api/v9") String apiHost,
             @PluginElement("Filters") Filter filter
     ) {
         if (name == null) {
