@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "express": "^4.18.1",
-    "jest": "^28.1.0",
+    "jest": "^28.1.2",
     "jest-junit": "^13.2.0"
   },
   "jest": {
