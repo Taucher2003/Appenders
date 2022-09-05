@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2021 Niklas van Schrick and the contributors of the Appenders Project
+ *  Copyright 2022 Niklas van Schrick and the contributors of the Appenders Project
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,6 +20,9 @@ package com.github.taucher2003.appenders.utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,6 +33,13 @@ public final class Utilities {
 
     // can't instantiate
     private Utilities() {
+    }
+
+    public static ScheduledExecutorService getExpiringScheduledExecutorService() {
+        ScheduledThreadPoolExecutor threadPoolExecutor = new ScheduledThreadPoolExecutor(1);
+        threadPoolExecutor.allowCoreThreadTimeOut(true);
+        threadPoolExecutor.setKeepAliveTime(500, TimeUnit.MILLISECONDS);
+        return threadPoolExecutor;
     }
 
     /**

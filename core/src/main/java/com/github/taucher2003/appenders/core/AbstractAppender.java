@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2021 Niklas van Schrick and the contributors of the Appenders Project
+ *  Copyright 2022 Niklas van Schrick and the contributors of the Appenders Project
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 
 package com.github.taucher2003.appenders.core;
 
+import com.github.taucher2003.appenders.utils.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -25,7 +26,6 @@ import org.slf4j.MarkerFactory;
 
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 public abstract class AbstractAppender {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractAppender.class);
-    protected static final ScheduledExecutorService EXECUTOR_SERVICE = Executors.newScheduledThreadPool(1);
+    protected static final ScheduledExecutorService EXECUTOR_SERVICE = Utilities.getExpiringScheduledExecutorService();
     protected static final Collection<AbstractAppender> INSTANCES = new CopyOnWriteArrayList<>();
     protected static final Marker SELF_IGNORE_MARKER = MarkerFactory.getMarker(AbstractAppender.class.getCanonicalName());
 
