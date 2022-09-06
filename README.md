@@ -476,7 +476,7 @@ Same applies to `level` and `ignoredMarker`. \
 
 ## 🐛 Known Bugs
 
-* Appenders prevents shutdown, requires explicit `System.exit(code)` to trigger the shutdown hook (#22)
+*Currently none, feel free to open issues if you found some*
 
 ## 🔮 Contributing
 
