@@ -14,3 +14,9 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - "topic: dependencies"
+  - package-ecosystem: "github-actions"
+    directory: .github/workflows
+    schedule:
+      interval: daily
+    labels:
+      - "topic: dependencies"
