@@ -20,6 +20,8 @@ const {spawn} = require("child_process");
 const startMockServer = require("../../src/index");
 const fs = require("fs");
 
+jest.retryTimes(3, {logErrorsBeforeRetry: true});
+
 module.exports.execute = (test, jestFn, {framework, configName, timeout}) => {
     // security against arbitrary code execution in spawn() below
     switch (framework) {
