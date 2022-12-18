@@ -17,7 +17,7 @@
  */
 
 const {execute, log4j} = require("./runner");
-xdescribe("GitHub Commenting Issue Appender for Log4J", () => {
+describe("GitHub Commenting Issue Appender for Log4J", () => {
     // 3 times = drops all events without throwable
     // 6 times = fetches issues before creating issue
     it("Calls Rest API 6 times", async () => {

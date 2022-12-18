@@ -20,7 +20,9 @@ const {spawn} = require("child_process");
 const startMockServer = require("../../src/index");
 const fs = require("fs");
 
-module.exports.execute = (test, jestFn, {framework, configName}) => {
+jest.retryTimes(3, {logErrorsBeforeRetry: true});
+
+module.exports.execute = (test, jestFn, {framework, configName, timeout}) => {
     // security against arbitrary code execution in spawn() below
     switch (framework) {
         case "log4j":
@@ -35,7 +37,7 @@ module.exports.execute = (test, jestFn, {framework, configName}) => {
     return startMockServer(test, jestFn).then((server) => {
         const childProcess = spawn("java", [`com.github.taucher2003.appenders.it.${framework}.LogMessageSender`], {
             cwd: `${framework}-it/target`,
-            timeout: 5000
+            timeout
         });
 
         childProcess.stdout.on('data', data => console.info(`${data}`));
@@ -59,5 +61,5 @@ function removeConfig(framework, configName) {
     fs.rmSync(`${framework}-it/target/${configName}.xml`);
 }
 
-module.exports.logback = {framework: "logback", configName: "logback"};
-module.exports.log4j = {framework: "log4j", configName: "log4j2"};
+module.exports.logback = {framework: "logback", configName: "logback", timeout: 3000};
+module.exports.log4j = {framework: "log4j", configName: "log4j2", timeout: 15000};

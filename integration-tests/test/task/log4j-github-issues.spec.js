@@ -17,7 +17,7 @@
  */
 
 const {execute, log4j} = require("./runner");
-xdescribe("GitHub Issue Appender for Log4J", () => {
+describe("GitHub Issue Appender for Log4J", () => {
     // 3 times = drops all events without throwable
     it("Calls Rest API 3 times", async () => {
         const mock = jest.fn()

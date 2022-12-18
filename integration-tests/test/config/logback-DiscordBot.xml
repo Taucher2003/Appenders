@@ -22,6 +22,8 @@
         <token>ABC</token>
         <channelId>123</channelId>
         <apiHost>http://localhost:6000</apiHost>
+        <flushInterval>500</flushInterval>
+        <flushUnit>MILLISECONDS</flushUnit>
     </appender>
     <root level="INFO">
         <appender-ref ref="discord-bot"/>

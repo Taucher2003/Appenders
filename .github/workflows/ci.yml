@@ -31,7 +31,7 @@ jobs:
       - name: Run Integration Tests
         run: |
           source ../.github/workflows/utils.sh
-          retry yarn test:ci
+          run_timed_command yarn test:ci
         working-directory: ./integration-tests
       - name: Upload Integration Test Results
         if: always()

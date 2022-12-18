@@ -37,7 +37,7 @@ public final class Log4JIssueAppender extends AbstractLog4JGithubAppender<IssueA
     }
 
     private Log4JIssueAppender(String name, String baseUrl, String repositoryOwner, String repositoryName, String accessToken, Filter filter, boolean ignoreExceptions) {
-        super(new IssueAppender(), baseUrl, repositoryOwner, repositoryName, accessToken, name, filter, null, ignoreExceptions, null);
+        super(new IssueAppender(), name, baseUrl, repositoryOwner, repositoryName, accessToken, filter, null, ignoreExceptions, null);
     }
 
     @PluginFactory
