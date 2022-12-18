@@ -17,7 +17,7 @@
  */
 
 const {execute, log4j} = require("./runner");
-xdescribe("Bot Appender for Log4J", () => {
+describe("Bot Appender for Log4J", () => {
     it("Calls Rest API 2 times", async () => {
         const mock = jest.fn()
         await execute("DiscordBot", mock, log4j);

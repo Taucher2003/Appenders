@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2021 Niklas van Schrick and the contributors of the Appenders Project
+ *  Copyright 2022 Niklas van Schrick and the contributors of the Appenders Project
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public final class Log4JCommentingIssueAppender extends AbstractLog4JGithubAppen
     }
 
     private Log4JCommentingIssueAppender(String name, String baseUrl, String repositoryOwner, String repositoryName, String accessToken, Filter filter, boolean ignoreExceptions) {
-        super(new CommentingIssueAppender(), baseUrl, repositoryOwner, repositoryName, accessToken, name, filter, null, ignoreExceptions, null);
+        super(new CommentingIssueAppender(), name, baseUrl, repositoryOwner, repositoryName, accessToken, filter, null, ignoreExceptions, null);
     }
 
     @PluginFactory
