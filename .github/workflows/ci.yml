@@ -19,7 +19,7 @@ jobs:
           run_timed_command mvn --batch-mode --update-snapshots package
       - name: Upload Unit Test Results
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Unit Test Results
           path: |
@@ -36,7 +36,7 @@ jobs:
         working-directory: ./integration-tests
       - name: Upload Integration Test Results
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Integration Test Results
           path: |
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Upload
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Event File
           path: ${{ github.event_path }}
