@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2021 Niklas van Schrick and the contributors of the Appenders Project
+ *  Copyright 2023 Niklas van Schrick and the contributors of the Appenders Project
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ public class WebhookAppender extends AbstractDiscordAppender {
     private static final int MAX_EMBED_PER_MESSAGE = 10;
 
     private String url;
+    private long threadId;
     private WebhookClient webhookClient;
 
     public WebhookAppender() {
@@ -56,6 +57,7 @@ public class WebhookAppender extends AbstractDiscordAppender {
         this.webhookClient = new WebhookClientBuilder(url)
                 .setAllowedMentions(AllowedMentions.none())
                 .setWait(true)
+                .setThreadId(threadId)
                 .build();
     }
 
@@ -78,5 +80,9 @@ public class WebhookAppender extends AbstractDiscordAppender {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public void setThreadId(long threadId) {
+        this.threadId = threadId;
     }
 }
