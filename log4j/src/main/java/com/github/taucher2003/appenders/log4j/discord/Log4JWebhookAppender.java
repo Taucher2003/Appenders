@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2021 Niklas van Schrick and the contributors of the Appenders Project
+ *  Copyright 2023 Niklas van Schrick and the contributors of the Appenders Project
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -36,14 +36,16 @@ public final class Log4JWebhookAppender extends AbstractLog4JDiscordAppender<Web
 
     // legacy support for log4j version before 2.11.2
     @Deprecated
-    private Log4JWebhookAppender(String name, String url, Filter filter, boolean ignoreExceptions, Object ignored) {
+    private Log4JWebhookAppender(String name, String url, long threadId, Filter filter, boolean ignoreExceptions, Object ignored) {
         super(new WebhookAppender(), name, filter, null, ignoreExceptions);
         delegate.setUrl(url);
+        delegate.setThreadId(threadId);
     }
 
-    private Log4JWebhookAppender(String name, String url, Filter filter, boolean ignoreExceptions) {
+    private Log4JWebhookAppender(String name, String url, long threadId, Filter filter, boolean ignoreExceptions) {
         super(new WebhookAppender(), name, filter, null, ignoreExceptions, null);
         delegate.setUrl(url);
+        delegate.setThreadId(threadId);
     }
 
     @PluginFactory
@@ -51,6 +53,7 @@ public final class Log4JWebhookAppender extends AbstractLog4JDiscordAppender<Web
             @PluginAttribute("name") String name,
             @PluginAttribute("ignoreExceptions") boolean ignoreExceptions,
             @PluginAttribute(value = "url", sensitive = true) String url,
+            @PluginAttribute("threadId") long threadId,
             @PluginElement("Filters") Filter filter
     ) {
         if (name == null) {
@@ -59,9 +62,9 @@ public final class Log4JWebhookAppender extends AbstractLog4JDiscordAppender<Web
         }
 
         try {
-            return new Log4JWebhookAppender(name, url, filter, ignoreExceptions);
+            return new Log4JWebhookAppender(name, url, threadId, filter, ignoreExceptions);
         } catch (NoSuchMethodError ignored) {
-            return new Log4JWebhookAppender(name, url, filter, ignoreExceptions, null);
+            return new Log4JWebhookAppender(name, url, threadId, filter, ignoreExceptions, null);
         }
     }
 }

@@ -154,7 +154,7 @@ You need to create a new appender in your `log4j2.xml` configuration. \
 As plugin, you can choose between `DiscordBot` and `DiscordWebhook`.
 
 The DiscordBot plugin requires the two settings `token` and `channelId`. \
-The DiscordWebhook plugin however, just requires the `url` setting.
+The DiscordWebhook plugin however, just requires the `url` and allows an optional `threadId` setting.
 
 #### Example Webhook and Bot Configuration
 
@@ -297,7 +297,7 @@ As class, you can choose between `com.github.taucher2003.appenders.logback.disco
 and `com.github.taucher2003.appenders.logback.discord.LogbackWebhookAppender`.
 
 The BotAppender requires the two settings `token` and `channelId`. \
-The WebhookAppender however, just requires the `url` setting.
+The WebhookAppender however, just requires the `url` and allows an optional `threadId` setting.
 
 Both of them allow shared settings. These are not required and have reasonable default settings.
 
