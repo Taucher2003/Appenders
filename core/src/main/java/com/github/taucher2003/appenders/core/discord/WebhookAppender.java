@@ -22,6 +22,7 @@ import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.AllowedMentions;
 import club.minnced.discord.webhook.send.WebhookEmbed;
+import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,17 +39,31 @@ public class WebhookAppender extends AbstractDiscordAppender {
 
     private String url;
     private long threadId;
+    private String username;
+    private String avatarUrl;
     private WebhookClient webhookClient;
 
     public WebhookAppender() {
         super.sendStrategy = this::doSend;
     }
 
-    private void doSend(Collection<WebhookEmbed> embeds) {
+    private void doSend(Collection<? extends WebhookEmbed> embeds) {
         try {
-            webhookClient.send(embeds).get(10, TimeUnit.SECONDS);
+            WebhookMessageBuilder message = new WebhookMessageBuilder().addEmbeds(embeds);
+            configureMessage(message);
+            webhookClient.send(message.build()).get(10, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException exception) {
             LOGGER.error(SELF_IGNORE_MARKER, "Failed to execute webhook", exception);
+        }
+    }
+
+    private void configureMessage(WebhookMessageBuilder builder) {
+        if(username != null) {
+            builder.setUsername(username);
+        }
+
+        if(avatarUrl != null) {
+            builder.setAvatarUrl(avatarUrl);
         }
     }
 
@@ -84,5 +99,13 @@ public class WebhookAppender extends AbstractDiscordAppender {
 
     public void setThreadId(long threadId) {
         this.threadId = threadId;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 }

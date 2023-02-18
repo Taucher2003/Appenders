@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2021 Niklas van Schrick and the contributors of the Appenders Project
+ *  Copyright 2023 Niklas van Schrick and the contributors of the Appenders Project
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -61,12 +61,12 @@ public abstract class AbstractDiscordAppender extends AbstractAppender {
     }
 
     @Override
-    public final void doAppend(LogEntry logEntry) {
+    public final void doAppend(LogEntry<?> logEntry) {
         WebhookEmbed embed = createEmbed(logEntry);
         add(embed);
     }
 
-    protected WebhookEmbed createEmbed(LogEntry logEntry) {
+    protected WebhookEmbed createEmbed(LogEntry<?> logEntry) {
         WebhookEmbedBuilder builder = new WebhookEmbedBuilder()
                 .setTitle(new WebhookEmbed.EmbedTitle(logEntry.getLevel().toString(), null))
                 .setTimestamp(Instant.ofEpochMilli(logEntry.getTimestamp()))
