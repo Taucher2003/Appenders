@@ -67,10 +67,10 @@ public final class Log4JWebhookAppender extends AbstractLog4JDiscordAppender<Web
             return null;
         }
 
-        if(username.isEmpty()) {
+        if(username != null && username.isEmpty()) {
             username = null;
         }
-        if(avatarUrl.isEmpty()) {
+        if(avatarUrl != null && avatarUrl.isEmpty()) {
             avatarUrl = null;
         }
 
