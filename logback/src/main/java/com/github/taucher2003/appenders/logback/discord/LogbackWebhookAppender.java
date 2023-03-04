@@ -47,4 +47,12 @@ public class LogbackWebhookAppender extends AbstractLogbackDiscordAppender<Webho
     public void setThreadId(long threadId) {
         delegate.setThreadId(threadId);
     }
+
+    public void setUsername(String username) {
+        delegate.setUsername(username);
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        delegate.setAvatarUrl(avatarUrl);
+    }
 }
